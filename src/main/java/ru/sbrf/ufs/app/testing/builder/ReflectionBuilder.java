@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
-public class FgServiceReflectionBuilder {
+public class ReflectionBuilder {
     private static final String FIELD_NAME = "name";
     private static final String FIELD_REQUEST = "request";
     private static final String FIELD_METHODS = "methods";
@@ -21,21 +21,21 @@ public class FgServiceReflectionBuilder {
     private ApplicationContext context;
     private ObjectMapper mapper;
 
-    private FgServiceReflectionBuilder() {
+    private ReflectionBuilder() {
         //builder
     }
 
-    public static FgServiceReflectionBuilder newInstance() {
-        return new FgServiceReflectionBuilder();
+    public static ReflectionBuilder newInstance() {
+        return new ReflectionBuilder();
     }
 
-    public FgServiceReflectionBuilder context(ApplicationContext context) {
+    public ReflectionBuilder context(ApplicationContext context) {
         this.context = context;
 
         return this;
     }
 
-    public FgServiceReflectionBuilder mapper(ObjectMapper mapper) {
+    public ReflectionBuilder mapper(ObjectMapper mapper) {
         this.mapper = mapper;
 
         return this;
