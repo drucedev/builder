@@ -12,15 +12,9 @@
     <properties>
         <business-hub-core.version>2.2.3</business-hub-core.version>
         <spring.version>4.2.4.RELEASE</spring.version>
-        <jackson.version>2.9.4</jackson.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-jersey2-jaxrs</artifactId>
-            <version>1.5.18</version>
-        </dependency>
         <dependency>
             <groupId>ru.sbrf.efs.model</groupId>
             <artifactId>business-hub-core</artifactId>
@@ -30,16 +24,16 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-expression</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

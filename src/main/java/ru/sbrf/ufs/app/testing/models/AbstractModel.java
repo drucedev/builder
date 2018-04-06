@@ -36,24 +36,18 @@ public abstract class AbstractModel implements Model {
         Set<Property> properties;
         Map<String, Object> example;
 
-        public AbstractBuilder setClassName(String className) {
+        protected AbstractBuilder className(String className) {
             this.className = className;
 
             return this;
         }
 
-        public AbstractBuilder setProperties(Set<Property> properties) {
+        protected AbstractBuilder properties(Set<Property> properties) {
             this.properties = properties;
 
             return this;
         }
 
-        public AbstractBuilder setExample(Map<String, Object> example) {
-            this.example = example;
-
-            return this;
-        }
-
-        public abstract AbstractModel build();
+        protected abstract AbstractModel build();
     }
 }

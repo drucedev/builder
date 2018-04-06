@@ -1,122 +1,135 @@
 package ru.sbrf.ufs.app.testing.builder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import ru.sbrf.bh.AbstractFine;
+import ru.sbrf.ufs.app.testing.models.Model;
+import ru.sbrf.ufs.app.testing.models.fg.FgMethod;
+import ru.sbrf.ufs.app.testing.models.fg.FgResponse;
+import ru.sbrf.ufs.app.testing.models.fg.FgService;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
+@Component
 public class ReflectionBuilder {
-    private static final String FIELD_NAME = "name";
-    private static final String FIELD_REQUEST = "request";
-    private static final String FIELD_METHODS = "methods";
+    private final Collection<FgService> fgServices;
 
-    private ApplicationContext context;
-    private ObjectMapper mapper;
-
-    private ReflectionBuilder() {
-        //builder
+    @Autowired
+    private ReflectionBuilder(ApplicationContext context) {
+        this.fgServices = build(context);
     }
 
-    public static ReflectionBuilder newInstance() {
-        return new ReflectionBuilder();
+    public Collection<FgService> getFgServices() {
+        return fgServices;
     }
 
-    public ReflectionBuilder context(ApplicationContext context) {
-        this.context = context;
-
-        return this;
-    }
-
-    public ReflectionBuilder mapper(ObjectMapper mapper) {
-        this.mapper = mapper;
-
-        return this;
-    }
-
-    public Object build() throws JsonProcessingException {
-        ArrayNode serviceNodes = mapper.createArrayNode();
+    private static Collection<FgService> build(ApplicationContext context) {
+        Collection<FgService> fgServices = new ArrayList<>();
 
         Map<String, AbstractFine> services = context.getBeansOfType(AbstractFine.class);
+
         for (Map.Entry<String, AbstractFine> entry : services.entrySet()) {
+            String name = entry.getKey();
             AbstractFine service = entry.getValue();
-            Method[] methods = service.getClass().getDeclaredMethods();
-            serviceNodes.add(createServiceNode(entry.getKey(), methods));
+
+            Class<?> serviceClass = service.getClass();
+            Method[] methods = serviceClass.getDeclaredMethods();
+
+            Collection<FgMethod> fgMethods = buildFgMethods(methods);
+            FgService fgService = new FgService.Builder()
+                    .name(name)
+                    .methods(fgMethods)
+                    .build();
+
+            fgServices.add(fgService);
         }
 
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(serviceNodes);
+        return fgServices;
     }
 
-    private ObjectNode createServiceNode(String key, Method[] methods) {
-        ObjectNode serviceNode = mapper.createObjectNode();
-        serviceNode.put(FIELD_NAME, key);
-
-        ArrayNode methodNodes = mapper.createArrayNode();
-
+    private static Collection<FgMethod> buildFgMethods(Method[] methods) {
+        Collection<FgMethod> fgMethods = new ArrayList<>();
         for (Method method : methods) {
-            ObjectNode methodNode = mapper.createObjectNode();
-            methodNode.put(FIELD_NAME, method.getName());
+            String name = method.getName();
+            FgResponse fgResponse = buildFgResponse(method);
+            Collection<Model> requestParameters = buildRequestParameters(method);
 
-            ArrayNode requestNodes = mapper.createArrayNode();
+            FgMethod fgMethod = new FgMethod.Builder()
+                    .name(name)
+                    .response(fgResponse)
+                    .requestParameters(requestParameters)
+                    .build();
 
-            Class<?>[] parameterTypes = method.getParameterTypes();
-            for (Class<?> parameterType : parameterTypes) {
-                requestNodes.add(createRequestNode(parameterType));
-            }
-
-            methodNode.set(FIELD_REQUEST, requestNodes);
-
-            methodNodes.add(methodNode);
+            fgMethods.add(fgMethod);
         }
 
-        serviceNode.set(FIELD_METHODS, methodNodes);
-
-        return serviceNode;
+        return fgMethods;
     }
 
-    private JsonNode createRequestNode(Class<?> parameterType) {
-        ObjectNode requestNode = mapper.createObjectNode();
-        for (Field field : parameterType.getDeclaredFields()) {
-            Class<?> type = field.getType();
-
-            if (!field.isSynthetic()) {
-                if (type.isPrimitive()) {
-                    requestNode.put(field.getName(), 0);
-                } else if (type.isArray() || Iterable.class.isAssignableFrom(type)) {
-                    requestNode.set(field.getName(), createArrayNode(field));
-                } else if (type.getName().startsWith("java.") || type.isEnum()) {
-                    requestNode.put(field.getName(), "");
-                } else {
-                    requestNode.set(field.getName(), createRequestNode(type));
-                }
-            }
+    private static FgResponse buildFgResponse(Method method) {
+        Class<?>[] exceptionTypes = method.getExceptionTypes();
+        Collection<String> errors = new ArrayList<>();
+        for (Class<?> exceptionType : exceptionTypes) {
+            errors.add(exceptionType.getName());
         }
 
-        return requestNode;
+        return new FgResponse.Builder()
+                //.model()
+                .exceptions(errors)
+                .build();
     }
 
-    private JsonNode createArrayNode(Field field) {
-        ArrayNode arrayNode = mapper.createArrayNode();
+    private static Collection<Model> buildRequestParameters(Method method) {
+        Collection<Model> requestParameters = new ArrayList<>();
 
-        Class<?> fieldType = field.getType();
-        Class<?> type;
-        if (fieldType.isArray()) {
-            type = fieldType.getComponentType();
-        } else {
-            ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-            type = (Class<?>) genericType.getActualTypeArguments()[0];
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (Class<?> parameterType : parameterTypes) {
+
         }
 
-        arrayNode.add(createRequestNode(type));
-
-        return arrayNode;
+        return requestParameters;
     }
+
+    //    private JsonNode createRequestNode(Class<?> parameterType) {
+    //        ObjectNode requestNode = mapper.createObjectNode();
+    //        for (Field field : parameterType.getDeclaredFields()) {
+    //            Class<?> type = field.getType();
+    //
+    //            if (!field.isSynthetic()) {
+    //                if (type.isPrimitive()) {
+    //                    requestNode.put(field.getName(), 0);
+    //                } else if (type.isArray() || Iterable.class.isAssignableFrom(type)) {
+    //                    requestNode.set(field.getName(), createArrayNode(field));
+    //                } else if (type.getName().startsWith("java.") || type.isEnum()) {
+    //                    requestNode.put(field.getName(), "");
+    //                } else {
+    //                    requestNode.set(field.getName(), createRequestNode(type));
+    //                }
+    //            }
+    //        }
+    //
+    //        return requestNode;
+    //    }
+    //
+    //    private JsonNode createArrayNode(Field field) {
+    //        ArrayNode arrayNode = mapper.createArrayNode();
+    //
+    //        Class<?> fieldType = field.getType();
+    //        Class<?> type;
+    //        if (fieldType.isArray()) {
+    //            type = fieldType.getComponentType();
+    //        } else {
+    //            ParameterizedType genericType = (ParameterizedType) field.getGenericType();
+    //            type = (Class<?>) genericType.getActualTypeArguments()[0];
+    //        }
+    //
+    //        arrayNode.add(createRequestNode(type));
+    //
+    //        return arrayNode;
+    //    }
 
 }
