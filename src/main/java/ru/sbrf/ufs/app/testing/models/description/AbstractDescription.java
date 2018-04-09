@@ -1,19 +1,16 @@
-package ru.sbrf.ufs.app.testing.models;
+package ru.sbrf.ufs.app.testing.models.description;
 
 import ru.sbrf.ufs.app.testing.models.properties.Property;
 
-import java.util.Map;
 import java.util.Set;
 
-public abstract class AbstractModel implements Model {
+public abstract class AbstractDescription implements Description {
     private final String className;
     private final Set<Property> properties;
-    private final Map<String, Object> example;
 
-    AbstractModel(String className, Set<Property> properties, Map<String, Object> example) {
+    protected AbstractDescription(String className, Set<Property> properties) {
         this.className = className;
         this.properties = properties;
-        this.example = example;
     }
 
     @Override
@@ -26,15 +23,9 @@ public abstract class AbstractModel implements Model {
         return properties;
     }
 
-    @Override
-    public Map<String, Object> getExample() {
-        return example;
-    }
-
     public abstract static class AbstractBuilder {
         String className;
         Set<Property> properties;
-        Map<String, Object> example;
 
         public AbstractBuilder className(String className) {
             this.className = className;
@@ -48,6 +39,6 @@ public abstract class AbstractModel implements Model {
             return this;
         }
 
-        public abstract AbstractModel build();
+        public abstract AbstractDescription build();
     }
 }

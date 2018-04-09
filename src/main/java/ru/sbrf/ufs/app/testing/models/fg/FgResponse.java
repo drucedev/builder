@@ -1,6 +1,6 @@
 package ru.sbrf.ufs.app.testing.models.fg;
 
-import ru.sbrf.ufs.app.testing.models.Model;
+import ru.sbrf.ufs.app.testing.models.model.Model;
 
 import java.util.Collection;
 import java.util.Set;

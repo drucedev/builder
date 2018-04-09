@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.sbrf.bh.AbstractFine;
-import ru.sbrf.ufs.app.testing.models.Model;
-import ru.sbrf.ufs.app.testing.models.SimpleModel;
+import ru.sbrf.ufs.app.testing.models.description.Description;
+import ru.sbrf.ufs.app.testing.models.description.SimpleDescription;
 import ru.sbrf.ufs.app.testing.models.fg.FgMethod;
 import ru.sbrf.ufs.app.testing.models.fg.FgResponse;
 import ru.sbrf.ufs.app.testing.models.fg.FgService;
+import ru.sbrf.ufs.app.testing.models.model.Model;
+import ru.sbrf.ufs.app.testing.models.model.SimpleModel;
 import ru.sbrf.ufs.app.testing.models.properties.Property;
 
 import java.lang.reflect.Field;
@@ -99,6 +101,13 @@ public class ReflectionBuilder {
     }
 
     private static Model buildModel(Class<?> type) {
+        Description description = buildDescription(type);
+        return new SimpleModel.Builder()
+                .description(description)
+                .build();
+    }
+
+    private static Description buildDescription(Class<?> type) {
         String className = type.getName();
 
         Set<Property> properties = new HashSet<>();
@@ -110,7 +119,7 @@ public class ReflectionBuilder {
             }
         }
 
-        return new SimpleModel.Builder()
+        return new SimpleDescription.Builder()
                 .className(className)
                 .properties(properties)
                 .build();
