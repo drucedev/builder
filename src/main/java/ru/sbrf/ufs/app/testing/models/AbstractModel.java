@@ -31,23 +31,23 @@ public abstract class AbstractModel implements Model {
         return example;
     }
 
-    protected abstract static class AbstractBuilder {
+    public abstract static class AbstractBuilder {
         String className;
         Set<Property> properties;
         Map<String, Object> example;
 
-        protected AbstractBuilder className(String className) {
+        public AbstractBuilder className(String className) {
             this.className = className;
 
             return this;
         }
 
-        protected AbstractBuilder properties(Set<Property> properties) {
+        public AbstractBuilder properties(Set<Property> properties) {
             this.properties = properties;
 
             return this;
         }
 
-        protected abstract AbstractModel build();
+        public abstract AbstractModel build();
     }
 }

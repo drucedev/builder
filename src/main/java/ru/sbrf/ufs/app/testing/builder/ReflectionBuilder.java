@@ -5,14 +5,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.sbrf.bh.AbstractFine;
 import ru.sbrf.ufs.app.testing.models.Model;
+import ru.sbrf.ufs.app.testing.models.SimpleModel;
 import ru.sbrf.ufs.app.testing.models.fg.FgMethod;
 import ru.sbrf.ufs.app.testing.models.fg.FgResponse;
 import ru.sbrf.ufs.app.testing.models.fg.FgService;
+import ru.sbrf.ufs.app.testing.models.properties.Property;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ReflectionBuilder {
@@ -39,7 +40,7 @@ public class ReflectionBuilder {
             Class<?> serviceClass = service.getClass();
             Method[] methods = serviceClass.getDeclaredMethods();
 
-            Collection<FgMethod> fgMethods = buildFgMethods(methods);
+            Set<FgMethod> fgMethods = buildFgMethods(methods);
             FgService fgService = new FgService.Builder()
                     .name(name)
                     .methods(fgMethods)
@@ -51,12 +52,12 @@ public class ReflectionBuilder {
         return fgServices;
     }
 
-    private static Collection<FgMethod> buildFgMethods(Method[] methods) {
-        Collection<FgMethod> fgMethods = new ArrayList<>();
+    private static Set<FgMethod> buildFgMethods(Method[] methods) {
+        Set<FgMethod> fgMethods = new HashSet<>();
         for (Method method : methods) {
             String name = method.getName();
             FgResponse fgResponse = buildFgResponse(method);
-            Collection<Model> requestParameters = buildRequestParameters(method);
+            Set<Model> requestParameters = buildRequestParameters(method);
 
             FgMethod fgMethod = new FgMethod.Builder()
                     .name(name)
@@ -72,26 +73,53 @@ public class ReflectionBuilder {
 
     private static FgResponse buildFgResponse(Method method) {
         Class<?>[] exceptionTypes = method.getExceptionTypes();
-        Collection<String> errors = new ArrayList<>();
+        Set<String> errors = new HashSet<>();
         for (Class<?> exceptionType : exceptionTypes) {
             errors.add(exceptionType.getName());
         }
 
+        Model model = buildModel(method.getReturnType());
+
         return new FgResponse.Builder()
-                //.model()
+                .model(model)
                 .exceptions(errors)
                 .build();
     }
 
-    private static Collection<Model> buildRequestParameters(Method method) {
-        Collection<Model> requestParameters = new ArrayList<>();
+    private static Set<Model> buildRequestParameters(Method method) {
+        Set<Model> requestParameters = new HashSet<>();
 
         Class<?>[] parameterTypes = method.getParameterTypes();
         for (Class<?> parameterType : parameterTypes) {
-
+            Model model = buildModel(parameterType);
+            requestParameters.add(model);
         }
 
         return requestParameters;
+    }
+
+    private static Model buildModel(Class<?> type) {
+        String className = type.getName();
+
+        Set<Property> properties = new HashSet<>();
+        Field[] fields = type.getFields();
+        for (Field field : fields) {
+            if (!field.isSynthetic()) {
+                Property property = buildProperty(field);
+                properties.add(property);
+            }
+        }
+
+        return new SimpleModel.Builder()
+                .className(className)
+                .properties(properties)
+                .build();
+    }
+
+    private static Property buildProperty(Field field) {
+        Class<?> fieldType = field.getType();
+        // TODO
+        return null;
     }
 
     //    private JsonNode createRequestNode(Class<?> parameterType) {

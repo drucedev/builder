@@ -1,12 +1,13 @@
 package ru.sbrf.ufs.app.testing.models.fg;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class FgService {
     private final String name;
-    private final Collection<FgMethod> methods;
+    private final Set<FgMethod> methods;
 
-    public FgService(String name, Collection<FgMethod> methods) {
+    public FgService(String name, Set<FgMethod> methods) {
         this.name = name;
         this.methods = methods;
     }
@@ -21,7 +22,7 @@ public class FgService {
 
     public static class Builder {
         private String name;
-        private Collection<FgMethod> methods;
+        private Set<FgMethod> methods;
 
         public Builder name(String name) {
             this.name = name;
@@ -29,7 +30,7 @@ public class FgService {
             return this;
         }
 
-        public Builder methods(Collection<FgMethod> methods) {
+        public Builder methods(Set<FgMethod> methods) {
             this.methods = methods;
 
             return this;
