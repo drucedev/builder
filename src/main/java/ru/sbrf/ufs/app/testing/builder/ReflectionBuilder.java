@@ -1,8 +1,6 @@
 package ru.sbrf.ufs.app.testing.builder;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import ru.sbrf.bh.AbstractFine;
 import ru.sbrf.ufs.app.testing.models.description.Description;
 import ru.sbrf.ufs.app.testing.models.description.SimpleDescription;
@@ -11,26 +9,19 @@ import ru.sbrf.ufs.app.testing.models.fg.FgResponse;
 import ru.sbrf.ufs.app.testing.models.fg.FgService;
 import ru.sbrf.ufs.app.testing.models.model.Model;
 import ru.sbrf.ufs.app.testing.models.model.SimpleModel;
-import ru.sbrf.ufs.app.testing.models.properties.Property;
+import ru.sbrf.ufs.app.testing.models.properties.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
-@Component
 public class ReflectionBuilder {
-    private final Collection<FgService> fgServices;
-
-    @Autowired
-    private ReflectionBuilder(ApplicationContext context) {
-        this.fgServices = build(context);
+    private ReflectionBuilder() {
+        //private
     }
 
-    public Collection<FgService> getFgServices() {
-        return fgServices;
-    }
-
-    private static Collection<FgService> build(ApplicationContext context) {
+    public static Collection<FgService> build(ApplicationContext context) {
         Collection<FgService> fgServices = new ArrayList<>();
 
         Map<String, AbstractFine> services = context.getBeansOfType(AbstractFine.class);
@@ -111,7 +102,7 @@ public class ReflectionBuilder {
         String className = type.getName();
 
         Set<Property> properties = new HashSet<>();
-        Field[] fields = type.getFields();
+        Collection<Field> fields = getInheritedPrivateFields(type);
         for (Field field : fields) {
             if (!field.isSynthetic()) {
                 Property property = buildProperty(field);
@@ -127,46 +118,121 @@ public class ReflectionBuilder {
 
     private static Property buildProperty(Field field) {
         Class<?> fieldType = field.getType();
-        // TODO
-        return null;
+
+        if (Boolean.class.isAssignableFrom(fieldType)) {
+            return new BooleanProperty.Builder()
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        } else if (isInteger(fieldType)) {
+            return new IntegerProperty.Builder()
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        } else if (isDecimal(fieldType)) {
+            return new DecimalProperty.Builder()
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        } else if (isDate(fieldType)) {
+            return new DateTimeProperty.Builder()
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        } else if (fieldType.isAssignableFrom(CharSequence.class)) {
+            return new StringProperty.Builder()
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        } else if (isArray(fieldType)) {
+            Class<?> parameterizedType = getParameterizedType(field);
+            Collection<Property> subProperties = buildSubProperties(parameterizedType);
+            Property property = new ObjectProperty.Builder()
+                    .properties(subProperties)
+                    .name(null)
+                    .className(parameterizedType.getName())
+                    .build();
+            Collection<Property> elements = Collections.singleton(property);
+
+            return new ArrayProperty.Builder()
+                    .elements(elements)
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        } else if (Object.class.isAssignableFrom(fieldType)) {
+            Collection<Property> subProperties = buildSubProperties(fieldType);
+
+            return new ObjectProperty.Builder()
+                    .properties(subProperties)
+                    .name(field.getName())
+                    .className(fieldType.getName())
+                    .build();
+        }
+
+        return new UntypedProperty.Builder()
+                .name(field.getName())
+                .className(fieldType.getName())
+                .build();
     }
 
-    //    private JsonNode createRequestNode(Class<?> parameterType) {
-    //        ObjectNode requestNode = mapper.createObjectNode();
-    //        for (Field field : parameterType.getDeclaredFields()) {
-    //            Class<?> type = field.getType();
-    //
-    //            if (!field.isSynthetic()) {
-    //                if (type.isPrimitive()) {
-    //                    requestNode.put(field.getName(), 0);
-    //                } else if (type.isArray() || Iterable.class.isAssignableFrom(type)) {
-    //                    requestNode.set(field.getName(), createArrayNode(field));
-    //                } else if (type.getName().startsWith("java.") || type.isEnum()) {
-    //                    requestNode.put(field.getName(), "");
-    //                } else {
-    //                    requestNode.set(field.getName(), createRequestNode(type));
-    //                }
-    //            }
-    //        }
-    //
-    //        return requestNode;
-    //    }
-    //
-    //    private JsonNode createArrayNode(Field field) {
-    //        ArrayNode arrayNode = mapper.createArrayNode();
-    //
-    //        Class<?> fieldType = field.getType();
-    //        Class<?> type;
-    //        if (fieldType.isArray()) {
-    //            type = fieldType.getComponentType();
-    //        } else {
-    //            ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-    //            type = (Class<?>) genericType.getActualTypeArguments()[0];
-    //        }
-    //
-    //        arrayNode.add(createRequestNode(type));
-    //
-    //        return arrayNode;
-    //    }
+    private static Collection<Property> buildSubProperties(Class<?> type) {
+        Collection<Property> subProperties = new HashSet<>();
+        if (!Map.class.isAssignableFrom(type)) {
+            Collection<Field> fields = getInheritedPrivateFields(type);
+            for (Field subField : fields) {
+                Property property = buildProperty(subField);
+                subProperties.add(property);
+            }
+        }
 
+        return subProperties;
+    }
+
+    private static Collection<Field> getInheritedPrivateFields(Class<?> type) {
+        List<Field> fields = new ArrayList<>();
+
+        Class<?> clazz = type;
+        while (clazz != null && clazz != Object.class) {
+            Field[] declaredFields = clazz.getDeclaredFields();
+            for (Field field : declaredFields) {
+                if (!field.isSynthetic()) {
+                    fields.add(field);
+                }
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return fields;
+    }
+
+    private static Class<?> getParameterizedType(Field field) {
+        Class<?> fieldType = field.getType();
+        Class<?> type;
+        if (fieldType.isArray()) {
+            type = fieldType.getComponentType();
+        } else {
+            ParameterizedType genericType = (ParameterizedType) field.getGenericType();
+            type = (Class<?>) genericType.getActualTypeArguments()[0];
+        }
+
+        return type;
+    }
+
+    private static boolean isInteger(Class<?> type) {
+        return Byte.class.isAssignableFrom(type) || Short.class.isAssignableFrom(type) ||
+                Integer.class.isAssignableFrom(type) || Long.class.isAssignableFrom(type);
+    }
+
+    private static boolean isDecimal(Class<?> type) {
+        return Float.class.isAssignableFrom(type) || Double.class.isAssignableFrom(type);
+    }
+
+    private static boolean isDate(Class<?> type) {
+        return Calendar.class.isAssignableFrom(type) || Date.class.isAssignableFrom(type);
+    }
+
+    private static boolean isArray(Class<?> type) {
+        return type.isArray() || Iterable.class.isAssignableFrom(type);
+    }
 }

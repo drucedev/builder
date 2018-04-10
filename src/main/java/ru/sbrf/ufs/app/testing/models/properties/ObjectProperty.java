@@ -27,12 +27,14 @@ public class ObjectProperty extends AbstractProperty {
     public static class Builder extends AbstractBuilder {
         private Collection<Property> properties;
 
-        public void properties(Collection<Property> properties) {
+        public Builder properties(Collection<Property> properties) {
             this.properties = properties;
+
+            return this;
         }
 
         @Override
-        protected AbstractProperty build() {
+        public AbstractProperty build() {
             return new ObjectProperty(name, className, TYPE, properties);
         }
     }

@@ -16,7 +16,7 @@ public class IntegerProperty extends AbstractProperty {
     public static class Builder extends AbstractBuilder {
 
         @Override
-        protected AbstractProperty build() {
+        public AbstractProperty build() {
             return new IntegerProperty(name, className, TYPE);
         }
     }

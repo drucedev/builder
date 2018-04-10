@@ -26,12 +26,14 @@ public class ArrayProperty extends AbstractProperty {
     public static class Builder extends AbstractBuilder {
         private Collection<Property> elements;
 
-        public void elements(Collection<Property> elements) {
+        public Builder elements(Collection<Property> elements) {
             this.elements = elements;
+
+            return this;
         }
 
         @Override
-        protected AbstractProperty build() {
+        public AbstractProperty build() {
             return new ArrayProperty(name, className, TYPE, elements);
         }
     }

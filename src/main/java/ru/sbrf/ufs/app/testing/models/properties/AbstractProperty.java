@@ -26,22 +26,22 @@ public abstract class AbstractProperty implements Property {
         return type;
     }
 
-    protected abstract static class AbstractBuilder {
+    public abstract static class AbstractBuilder {
         String name;
         String className;
 
-        protected AbstractBuilder name(String name) {
+        public AbstractBuilder name(String name) {
             this.name = name;
 
             return this;
         }
 
-        protected AbstractBuilder className(String className) {
+        public AbstractBuilder className(String className) {
             this.className = className;
 
             return this;
         }
 
-        protected abstract AbstractProperty build();
+        public abstract AbstractProperty build();
     }
 }

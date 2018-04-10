@@ -12,6 +12,7 @@
     <properties>
         <business-hub-core.version>2.2.3</business-hub-core.version>
         <spring.version>4.2.4.RELEASE</spring.version>
+        <jersey.version>2.25.1</jersey.version>
     </properties>
 
     <dependencies>
@@ -34,6 +35,11 @@
                     <artifactId>spring-aop</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
     </dependencies>
 
