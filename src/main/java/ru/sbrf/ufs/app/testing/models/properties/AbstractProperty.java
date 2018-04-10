@@ -1,14 +1,21 @@
 package ru.sbrf.ufs.app.testing.models.properties;
 
+import java.util.Objects;
+
 public abstract class AbstractProperty implements Property {
-    private final String name;
-    private final String className;
     private final String type;
 
-    AbstractProperty(String name, String className, String type) {
-        this.name = name;
-        this.className = className;
+    private String className;
+    private String name;
+
+    AbstractProperty(String type) {
         this.type = type;
+    }
+
+    AbstractProperty(String type, String className, String name) {
+        this.type = type;
+        this.className = className;
+        this.name = name;
     }
 
     @Override
@@ -26,22 +33,34 @@ public abstract class AbstractProperty implements Property {
         return type;
     }
 
-    public abstract static class AbstractBuilder {
-        String name;
-        String className;
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        public AbstractBuilder name(String name) {
-            this.name = name;
+    @Override
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
-            return this;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
 
-        public AbstractBuilder className(String className) {
-            this.className = className;
-
-            return this;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
         }
 
-        public abstract AbstractProperty build();
+        AbstractProperty that = (AbstractProperty) o;
+        return Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getClassName(), that.getClassName()) &&
+                Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getType(), getClassName(), getName());
     }
 }

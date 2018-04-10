@@ -8,4 +8,8 @@ public interface Property {
     String getType();
 
     Object getValue();
+
+    void setName(String name);
+
+    void setClassName(String className);
 }

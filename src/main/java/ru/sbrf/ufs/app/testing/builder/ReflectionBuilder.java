@@ -2,6 +2,8 @@ package ru.sbrf.ufs.app.testing.builder;
 
 import org.springframework.context.ApplicationContext;
 import ru.sbrf.bh.AbstractFine;
+import ru.sbrf.bh.Root;
+import ru.sbrf.bh.vo.Additional;
 import ru.sbrf.ufs.app.testing.models.description.Description;
 import ru.sbrf.ufs.app.testing.models.description.SimpleDescription;
 import ru.sbrf.ufs.app.testing.models.fg.FgMethod;
@@ -13,6 +15,7 @@ import ru.sbrf.ufs.app.testing.models.properties.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
@@ -119,60 +122,39 @@ public class ReflectionBuilder {
     private static Property buildProperty(Field field) {
         Class<?> fieldType = field.getType();
 
+        Property property;
+
         if (Boolean.class.isAssignableFrom(fieldType)) {
-            return new BooleanProperty.Builder()
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
+            property = new BooleanProperty();
         } else if (isInteger(fieldType)) {
-            return new IntegerProperty.Builder()
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
+            property = new IntegerProperty();
         } else if (isDecimal(fieldType)) {
-            return new DecimalProperty.Builder()
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
+            property = new DecimalProperty();
         } else if (isDate(fieldType)) {
-            return new DateTimeProperty.Builder()
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
-        } else if (fieldType.isAssignableFrom(CharSequence.class)) {
-            return new StringProperty.Builder()
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
+            property = new DateTimeProperty();
+        } else if (CharSequence.class.isAssignableFrom(fieldType) || fieldType.isEnum()) {
+            property = new StringProperty();
         } else if (isArray(fieldType)) {
-            Class<?> parameterizedType = getParameterizedType(field);
-            Collection<Property> subProperties = buildSubProperties(parameterizedType);
-            Property property = new ObjectProperty.Builder()
-                    .properties(subProperties)
-                    .name(null)
-                    .className(parameterizedType.getName())
-                    .build();
-            Collection<Property> elements = Collections.singleton(property);
+            // TODO Создать 1 элемент массива
+            //Class<?> parameterizedType = getParameterizedType(field);
 
-            return new ArrayProperty.Builder()
-                    .elements(elements)
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
+            property = new ArrayProperty();
         } else if (Object.class.isAssignableFrom(fieldType)) {
-            Collection<Property> subProperties = buildSubProperties(fieldType);
+            // TODO Отсеить типы, которые не нужно разбирать
+            Collection<Property> subProperties = new HashSet<>();
+            if (Root.class.isAssignableFrom(fieldType) || Additional.class.isAssignableFrom(fieldType)) {
+                subProperties.addAll(buildSubProperties(fieldType));
+            }
 
-            return new ObjectProperty.Builder()
-                    .properties(subProperties)
-                    .name(field.getName())
-                    .className(fieldType.getName())
-                    .build();
+            property = new ObjectProperty(subProperties);
+        } else {
+            property = new UntypedProperty();
         }
 
-        return new UntypedProperty.Builder()
-                .name(field.getName())
-                .className(fieldType.getName())
-                .build();
+        property.setName(field.getName());
+        property.setClassName(fieldType.getName());
+
+        return property;
     }
 
     private static Collection<Property> buildSubProperties(Class<?> type) {
@@ -195,7 +177,7 @@ public class ReflectionBuilder {
         while (clazz != null && clazz != Object.class) {
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field field : declaredFields) {
-                if (!field.isSynthetic()) {
+                if (!field.isSynthetic() && !field.isEnumConstant() && !Modifier.isStatic(field.getModifiers())) {
                     fields.add(field);
                 }
             }

@@ -4,20 +4,16 @@ public class StringProperty extends AbstractProperty {
     private static final String TYPE = "string";
     private static final String DEFAULT_VALUE = "abc";
 
-    private StringProperty(String name, String className, String type) {
-        super(name, className, type);
+    public StringProperty() {
+        super(TYPE);
+    }
+
+    public StringProperty(String name, String className) {
+        super(name, className, TYPE);
     }
 
     @Override
     public Object getValue() {
         return DEFAULT_VALUE;
-    }
-
-    public static class Builder extends AbstractBuilder {
-
-        @Override
-        public AbstractProperty build() {
-            return new StringProperty(name, className, TYPE);
-        }
     }
 }
