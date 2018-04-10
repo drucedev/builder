@@ -12,11 +12,9 @@ import ru.sbrf.ufs.app.testing.models.fg.FgService;
 import ru.sbrf.ufs.app.testing.models.model.Model;
 import ru.sbrf.ufs.app.testing.models.model.SimpleModel;
 import ru.sbrf.ufs.app.testing.models.properties.*;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.*;
 
 public class ReflectionBuilder {
@@ -135,10 +133,11 @@ public class ReflectionBuilder {
         } else if (CharSequence.class.isAssignableFrom(fieldType) || fieldType.isEnum()) {
             property = new StringProperty();
         } else if (isArray(fieldType)) {
-            // TODO Создать 1 элемент массива
-            //Class<?> parameterizedType = getParameterizedType(field);
-
-            property = new ArrayProperty();
+            Class<?> parameterizedType = getParameterizedType(field);
+            Collection<Property> subProperties = buildSubProperties(parameterizedType);
+            Property objectProperty = new ObjectProperty(subProperties);
+            Collection<Property> elements = Collections.singleton(objectProperty);
+            property = new ArrayProperty(elements);
         } else if (Object.class.isAssignableFrom(fieldType)) {
             // TODO Отсеить типы, которые не нужно разбирать
             Collection<Property> subProperties = new HashSet<>();
@@ -159,7 +158,7 @@ public class ReflectionBuilder {
 
     private static Collection<Property> buildSubProperties(Class<?> type) {
         Collection<Property> subProperties = new HashSet<>();
-        if (!Map.class.isAssignableFrom(type)) {
+        if (!Map.class.isAssignableFrom(type) && !Throwable.class.isAssignableFrom(type)) {
             Collection<Field> fields = getInheritedPrivateFields(type);
             for (Field subField : fields) {
                 Property property = buildProperty(subField);
@@ -195,7 +194,10 @@ public class ReflectionBuilder {
             type = fieldType.getComponentType();
         } else {
             ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-            type = (Class<?>) genericType.getActualTypeArguments()[0];
+            Type actualTypeArgument = genericType.getActualTypeArguments()[0];
+            type = actualTypeArgument instanceof ParameterizedTypeImpl
+                    ? ((ParameterizedTypeImpl) actualTypeArgument).getRawType()
+                    : (Class<?>) actualTypeArgument;
         }
 
         return type;
