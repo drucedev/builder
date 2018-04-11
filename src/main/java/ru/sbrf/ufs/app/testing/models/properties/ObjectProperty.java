@@ -1,9 +1,6 @@
 package ru.sbrf.ufs.app.testing.models.properties;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ObjectProperty extends AbstractProperty {
     private static final String TYPE = "object";
@@ -32,7 +29,11 @@ public class ObjectProperty extends AbstractProperty {
             }
         }
 
-        return map;
+        List<Object> list = new ArrayList<>();
+        list.add(getClassName());
+        list.add(map);
+
+        return list;
     }
 
     @Override

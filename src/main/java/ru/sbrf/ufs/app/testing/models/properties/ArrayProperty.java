@@ -2,6 +2,7 @@ package ru.sbrf.ufs.app.testing.models.properties;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class ArrayProperty extends AbstractProperty {
@@ -31,7 +32,11 @@ public class ArrayProperty extends AbstractProperty {
             }
         }
 
-        return values;
+        List<Object> list = new ArrayList<>();
+        list.add(ArrayList.class.getName());
+        list.add(values);
+
+        return list;
     }
 
     @Override

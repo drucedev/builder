@@ -17,12 +17,9 @@
 
 ```java
 @GET
-@Path("/api")
-public Object api() throws JsonProcessingException {
-    return FgServiceReflectionBuilder.newInstance()
-            .context(applicationContext)
-            .mapper(getMapper())
-            .build();
+@Path("/builder.json")
+public Object builder() {
+    return ReflectionBuilder.build(applicationContext);
 }
 ```
 
@@ -32,4 +29,4 @@ webapp вашего БФС.
 **Важно**
 
 Если хотите поменять api для получения данных собраных билдером, то нужно будет изменить
-url для получения данных на клиенте в файле **_/frontend/src/envelope/api.js_**
+url для получения данных на клиенте.
