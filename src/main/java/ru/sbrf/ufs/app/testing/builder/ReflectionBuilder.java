@@ -2,8 +2,6 @@ package ru.sbrf.ufs.app.testing.builder;
 
 import org.springframework.context.ApplicationContext;
 import ru.sbrf.bh.AbstractFine;
-import ru.sbrf.bh.Root;
-import ru.sbrf.bh.vo.Additional;
 import ru.sbrf.ufs.app.testing.models.description.Description;
 import ru.sbrf.ufs.app.testing.models.description.SimpleDescription;
 import ru.sbrf.ufs.app.testing.models.fg.FgMethod;
@@ -15,6 +13,8 @@ import ru.sbrf.ufs.app.testing.models.properties.*;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 public class ReflectionBuilder {
@@ -122,7 +122,7 @@ public class ReflectionBuilder {
 
         Property property;
 
-        if (Boolean.class.isAssignableFrom(fieldType)) {
+        if (isBoolean(fieldType)) {
             property = new BooleanProperty();
         } else if (isInteger(fieldType)) {
             property = new IntegerProperty();
@@ -138,13 +138,8 @@ public class ReflectionBuilder {
             Property objectProperty = new ObjectProperty(subProperties);
             Collection<Property> elements = Collections.singleton(objectProperty);
             property = new ArrayProperty(elements);
-        } else if (Object.class.isAssignableFrom(fieldType)) {
-            // TODO Отсеить типы, которые не нужно разбирать
-            Collection<Property> subProperties = new HashSet<>();
-            if (Root.class.isAssignableFrom(fieldType) || Additional.class.isAssignableFrom(fieldType)) {
-                subProperties.addAll(buildSubProperties(fieldType));
-            }
-
+        } else if (isCustomType(fieldType)) {
+            Collection<Property> subProperties = buildSubProperties(fieldType);
             property = new ObjectProperty(subProperties);
         } else {
             property = new UntypedProperty();
@@ -203,9 +198,14 @@ public class ReflectionBuilder {
         return type;
     }
 
+    private static boolean isBoolean(Class<?> type) {
+        return Boolean.class.isAssignableFrom(type);
+    }
+
     private static boolean isInteger(Class<?> type) {
         return Byte.class.isAssignableFrom(type) || Short.class.isAssignableFrom(type) ||
-                Integer.class.isAssignableFrom(type) || Long.class.isAssignableFrom(type);
+                Integer.class.isAssignableFrom(type) || Long.class.isAssignableFrom(type) ||
+                BigDecimal.class.isAssignableFrom(type) || BigInteger.class.isAssignableFrom(type);
     }
 
     private static boolean isDecimal(Class<?> type) {
@@ -218,5 +218,9 @@ public class ReflectionBuilder {
 
     private static boolean isArray(Class<?> type) {
         return type.isArray() || Iterable.class.isAssignableFrom(type);
+    }
+
+    private static boolean isCustomType(Class<?> type) {
+        return type != null && !(type.getName().startsWith("java.") || type.getName().startsWith("javax."));
     }
 }
