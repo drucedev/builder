@@ -3,6 +3,7 @@ package ru.sbrf.ufs.app.testing.models.fg;
 import ru.sbrf.ufs.app.testing.models.model.Model;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 
 public class FgMethod {
@@ -53,6 +54,14 @@ public class FgMethod {
 
         public FgMethod build() {
             return new FgMethod(name, response, requestParameters);
+        }
+    }
+
+    public static class NameComparator implements Comparator<FgMethod> {
+
+        @Override
+        public int compare(FgMethod o1, FgMethod o2) {
+            return o1.name.compareTo(o2.name);
         }
     }
 }

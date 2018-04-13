@@ -24,7 +24,7 @@ public class ReflectionBuilder {
     }
 
     public static Collection<FgService> build(ApplicationContext context) {
-        Collection<FgService> fgServices = new ArrayList<>();
+        Set<FgService> fgServices = new TreeSet<>(new FgService.NameComparator());
 
         Map<String, AbstractFine> services = context.getBeansOfType(AbstractFine.class);
 
@@ -48,7 +48,7 @@ public class ReflectionBuilder {
     }
 
     private static Set<FgMethod> buildFgMethods(Method[] methods) {
-        Set<FgMethod> fgMethods = new HashSet<>();
+        Set<FgMethod> fgMethods = new TreeSet<>(new FgMethod.NameComparator());
         for (Method method : methods) {
             String name = method.getName();
             FgResponse fgResponse = buildFgResponse(method);
