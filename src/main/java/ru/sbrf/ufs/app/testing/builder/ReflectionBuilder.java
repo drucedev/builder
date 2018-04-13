@@ -232,6 +232,8 @@ public class ReflectionBuilder {
     }
 
     private static boolean isCustomType(Class<?> type) {
-        return type != null && !(type.getName().startsWith("java.") || type.getName().startsWith("javax."));
+        return type != null &&
+                !Modifier.isAbstract(type.getModifiers())
+                && !(type.getName().startsWith("java.") || type.getName().startsWith("javax."));
     }
 }
