@@ -135,8 +135,11 @@ public class ReflectionBuilder {
             property = new BigDecimalProperty();
         } else if (isDate(type)) {
             property = new DateTimeProperty();
-        } else if (CharSequence.class.isAssignableFrom(type) || type.isEnum()) {
+        } else if (isString(type)) {
             property = new StringProperty();
+        } else if (isEnum(type)) {
+            List<?> enumConstants = Arrays.asList(type.getEnumConstants());
+            property = new EnumProperty(enumConstants);
         } else if (isArray(type)) {
             Class<?> parameterizedType = getParameterizedType(fieldWrapper);
             Property prop = buildProperty(new FieldWrapper(parameterizedType.getName(), parameterizedType, parameterizedType));
@@ -225,6 +228,14 @@ public class ReflectionBuilder {
 
     private static boolean isDate(Class<?> type) {
         return Calendar.class.isAssignableFrom(type) || Date.class.isAssignableFrom(type);
+    }
+
+    private static boolean isString(Class<?> type) {
+        return CharSequence.class.isAssignableFrom(type);
+    }
+
+    private static boolean isEnum(Class<?> type) {
+        return type.isEnum();
     }
 
     private static boolean isArray(Class<?> type) {
