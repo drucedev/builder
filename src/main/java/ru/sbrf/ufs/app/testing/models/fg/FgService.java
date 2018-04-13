@@ -1,6 +1,7 @@
 package ru.sbrf.ufs.app.testing.models.fg;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 
 public class FgService {
@@ -38,6 +39,13 @@ public class FgService {
 
         public FgService build() {
             return new FgService(name, methods);
+        }
+    }
+
+    public static class NameComparator implements Comparator<FgService> {
+        @Override
+        public int compare(FgService o1, FgService o2) {
+            return o1.name.compareTo(o2.name);
         }
     }
 }
