@@ -10,6 +10,7 @@ import ru.sbrf.ufs.app.testing.models.fg.FgService;
 import ru.sbrf.ufs.app.testing.models.model.Model;
 import ru.sbrf.ufs.app.testing.models.model.SimpleModel;
 import ru.sbrf.ufs.app.testing.models.properties.*;
+import ru.sbrf.ufs.app.testing.wrapper.FieldWrapper;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.*;
@@ -106,7 +107,7 @@ public class ReflectionBuilder {
         Collection<Field> fields = getInheritedPrivateFields(type);
         for (Field field : fields) {
             if (!field.isSynthetic()) {
-                Property property = buildProperty(field);
+                Property property = buildProperty(new FieldWrapper(field.getName(), field.getType(), field.getGenericType()));
                 properties.add(property);
             }
         }
@@ -117,36 +118,39 @@ public class ReflectionBuilder {
                 .build();
     }
 
-    private static Property buildProperty(Field field) {
-        Class<?> fieldType = field.getType();
+    private static Property buildProperty(FieldWrapper fieldWrapper) {
+        Class<?> type = fieldWrapper.getType();
 
         Property property;
 
-        if (isBoolean(fieldType)) {
+        if (isBoolean(type)) {
             property = new BooleanProperty();
-        } else if (isInteger(fieldType)) {
+        } else if (isInteger(type)) {
             property = new IntegerProperty();
-        } else if (isDecimal(fieldType)) {
+        } else if (isBigInteger(type)) {
+            property = new BigIntegerProperty();
+        } else if (isDecimal(type)) {
             property = new DecimalProperty();
-        } else if (isDate(fieldType)) {
+        } else if (isBigDecimal(type)) {
+            property = new BigDecimalProperty();
+        } else if (isDate(type)) {
             property = new DateTimeProperty();
-        } else if (CharSequence.class.isAssignableFrom(fieldType) || fieldType.isEnum()) {
+        } else if (CharSequence.class.isAssignableFrom(type) || type.isEnum()) {
             property = new StringProperty();
-        } else if (isArray(fieldType)) {
-            Class<?> parameterizedType = getParameterizedType(field);
-            Collection<Property> subProperties = buildSubProperties(parameterizedType);
-            Property objectProperty = new ObjectProperty(subProperties);
-            Collection<Property> elements = Collections.singleton(objectProperty);
+        } else if (isArray(type)) {
+            Class<?> parameterizedType = getParameterizedType(fieldWrapper);
+            Property prop = buildProperty(new FieldWrapper(parameterizedType.getName(), parameterizedType, parameterizedType));
+            Collection<Property> elements = Collections.singleton(prop);
             property = new ArrayProperty(elements);
-        } else if (isCustomType(fieldType)) {
-            Collection<Property> subProperties = buildSubProperties(fieldType);
+        } else if (isCustomType(type)) {
+            Collection<Property> subProperties = buildSubProperties(type);
             property = new ObjectProperty(subProperties);
         } else {
             property = new UntypedProperty();
         }
 
-        property.setName(field.getName());
-        property.setClassName(fieldType.getName());
+        property.setName(fieldWrapper.getName());
+        property.setClassName(type.getName());
 
         return property;
     }
@@ -156,7 +160,7 @@ public class ReflectionBuilder {
         if (!Map.class.isAssignableFrom(type) && !Throwable.class.isAssignableFrom(type)) {
             Collection<Field> fields = getInheritedPrivateFields(type);
             for (Field subField : fields) {
-                Property property = buildProperty(subField);
+                Property property = buildProperty(new FieldWrapper(subField.getName(), subField.getType(), subField.getGenericType()));
                 subProperties.add(property);
             }
         }
@@ -182,7 +186,7 @@ public class ReflectionBuilder {
         return fields;
     }
 
-    private static Class<?> getParameterizedType(Field field) {
+    private static Class<?> getParameterizedType(FieldWrapper field) {
         Class<?> fieldType = field.getType();
         Class<?> type;
         if (fieldType.isArray()) {
@@ -202,10 +206,17 @@ public class ReflectionBuilder {
         return Boolean.class.isAssignableFrom(type);
     }
 
+    private static boolean isBigInteger(Class<?> type) {
+        return BigInteger.class.isAssignableFrom(type);
+    }
+
     private static boolean isInteger(Class<?> type) {
         return Byte.class.isAssignableFrom(type) || Short.class.isAssignableFrom(type) ||
-                Integer.class.isAssignableFrom(type) || Long.class.isAssignableFrom(type) ||
-                BigDecimal.class.isAssignableFrom(type) || BigInteger.class.isAssignableFrom(type);
+                Integer.class.isAssignableFrom(type) || Long.class.isAssignableFrom(type);
+    }
+
+    private static boolean isBigDecimal(Class<?> type) {
+        return BigDecimal.class.isAssignableFrom(type);
     }
 
     private static boolean isDecimal(Class<?> type) {

@@ -3,16 +3,12 @@ package ru.sbrf.ufs.app.testing.models.properties;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateTimeProperty extends AbstractProperty {
-    private static final String TYPE = "date-time";
-    private static final Long DEFAULT_VALUE = 0L;
+public class BigDecimalProperty extends AbstractProperty {
+    private static final String TYPE = "big-decimal";
+    private static final Float DEFAULT_VALUE = 0f;
 
-    public DateTimeProperty() {
+    public BigDecimalProperty() {
         super(TYPE);
-    }
-
-    public DateTimeProperty(String name, String className) {
-        super(name, className, TYPE);
     }
 
     @Override

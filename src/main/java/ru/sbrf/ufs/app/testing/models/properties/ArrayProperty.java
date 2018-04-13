@@ -33,7 +33,7 @@ public class ArrayProperty extends AbstractProperty {
         }
 
         List<Object> list = new ArrayList<>();
-        list.add(ArrayList.class.getName());
+        list.add(getClassName());
         list.add(values);
 
         return list;
