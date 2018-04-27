@@ -7,9 +7,9 @@
 
 ```xml
 <dependency>
-    <groupId>ru.sbrf.ufs.app.testing</groupId>
-    <artifactId>builder</artifactId>
-    <version>1.0.0</version>
+    <groupId>ru.sbrf.ufs.app.envelope</groupId>
+    <artifactId>envelope-ui</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
