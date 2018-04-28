@@ -42,7 +42,7 @@ export const readJsonFile = file => {
 
 export const encodeUri = (uri) => {
   const splitUri = uri.split('/');
-  return `${encodeURIComponent(splitUri[1])}/${encodeURIComponent(splitUri[2])}`;
+  return `/${encodeURIComponent(splitUri[1])}/${encodeURIComponent(splitUri[2])}`;
 };
 
 export const decodeUri = (uri) => {
