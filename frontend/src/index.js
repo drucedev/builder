@@ -7,6 +7,7 @@ import {ConnectedRouter} from 'connected-react-router';
 import ReactDOM from 'react-dom';
 import {createHashHistory} from 'history';
 import './index.css';
+import registerServiceWorker from "./registerServiceWorker";
 
 const history = createHashHistory();
 const persistedState = loadState();
@@ -23,3 +24,5 @@ ReactDOM.render(
   ),
   document.getElementById('root')
 );
+
+registerServiceWorker();

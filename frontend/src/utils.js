@@ -40,4 +40,14 @@ export const readJsonFile = file => {
   return promise;
 };
 
+export const encodeUri = (uri) => {
+  const splitUri = uri.split('/');
+  return `${encodeURIComponent(splitUri[1])}/${encodeURIComponent(splitUri[2])}`;
+};
+
+export const decodeUri = (uri) => {
+  const splitUri = uri.split('/');
+  return `/${decodeURIComponent(splitUri[1])}/${decodeURIComponent(splitUri[2])}`;
+};
+
 export const generateId = () => uuid.v4();

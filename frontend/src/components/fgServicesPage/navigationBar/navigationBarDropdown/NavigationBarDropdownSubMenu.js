@@ -2,6 +2,7 @@ import {a, li, span, ul, component} from "../../../elements";
 import {Link} from 'react-router-dom';
 import {Dropdown} from 'bootstrap.native';
 import React from 'react';
+import {encodeUri} from "../../../../utils";
 
 export default class NavigationBarDropdownSubMenu extends React.Component {
   componentDidMount() {
@@ -32,7 +33,7 @@ export default class NavigationBarDropdownSubMenu extends React.Component {
           return li({role: 'presentation'},
             component(Link, {
                 role: 'menuitem',
-                to: `/${service.name}/${method.name}`
+                to: encodeUri(`/${service.name}/${method.name}`)
               },
               method.name
             )

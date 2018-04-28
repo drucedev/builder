@@ -1,6 +1,8 @@
 import http from "../http.js";
 import config from "../config.js";
 import {prepareJson, prettyJson, readJsonFile, saveJsonFile} from "../utils.js";
+import mockBuilder from "../mock/mockBuilder";
+import {encodeUri} from "../utils";
 
 export const SET_REQUESTS = "requests/SET_REQUESTS";
 export const setRequests = (requests) => ({
@@ -100,7 +102,8 @@ export const fetchBuilder = () => (dispatch, getState) => {
 
 export const postRequest = (uri, request) => (dispatch) => {
   dispatch(sendCurrentRequest());
-  return http.post(uri, request.value,
+  const encodedUri = encodeUri(uri);
+  return http.post(encodedUri, request.value,
     {headers: {'Content-Type': 'application/json;charset=utf8'}}
   ).then(res => {
     const json = prettyJson(res.data);
