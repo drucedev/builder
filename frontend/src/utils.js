@@ -1,17 +1,17 @@
 import uuid from 'uuid';
 import {saveAs} from 'file-saver'
 
-export const prettyJson = obj => {
+export const prettyJson = (obj) => {
   return JSON.stringify(obj, undefined, 4);
 };
-export const prepareJson = raw => {
+export const prepareJson = (raw) => {
   return raw
     .replace(/\\n\\tat|\\n/g, "\n")
     .replace(/\\\\\\"|\\"/g, "'");
 };
 
-export const normalizeLineEndings = str => {
-  return str && str.replace(/\r\n|\r/g, '\n') || str;
+export const normalizeLineEndings = (str) => {
+  return str ? str.replace(/\r\n|\r/g, '\n') : str;
 };
 
 export const saveJsonFile = (name, object) => {
@@ -19,7 +19,7 @@ export const saveJsonFile = (name, object) => {
   saveAs(new Blob([serializedObject], {type: 'application/json;charset=utf8'}), `${name}.json`)
 };
 
-export const readJsonFile = file => {
+export const readJsonFile = (file) => {
   const reader = new FileReader();
 
   const promise = new Promise((resolve, reject) => {

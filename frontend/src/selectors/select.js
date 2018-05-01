@@ -10,5 +10,5 @@ export const getSelectedId = createSelector(
 );
 
 export const isDefaultRequest = createSelector(
-  getSelectedId, selectedId => selectedId === config.defaultRequestId
+  getSelectedId, (selectedId) => (selectedId) === config.defaultRequestId
 );

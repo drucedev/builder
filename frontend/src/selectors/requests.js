@@ -5,14 +5,13 @@ import {createSelector} from 'reselect';
 
 const requestsState = state => state.requests;
 
-
-export const getCurrentRequests = createSelector(
+const getCurrentRequests = createSelector(
   [requestsState, getCurrentUri],
   (requests, currentUri) => requests[currentUri] || {}
 );
 
 export const getCurrentRequestsValues = createSelector(
-  getCurrentRequests, currentRequests => Object.values(currentRequests)
+  getCurrentRequests, (currentRequests) => Object.values(currentRequests)
 );
 
 export const getCurrentRequest = createSelector(
@@ -20,5 +19,5 @@ export const getCurrentRequest = createSelector(
   (selectedId, currentRequests) => currentRequests[selectedId]);
 
 export const getDefaultRequestSchema = createSelector(
-  getCurrentRequests, requests => requests[config.defaultRequestId].schema
+  getCurrentRequests, (requests) => requests[config.defaultRequestId].schema
 );

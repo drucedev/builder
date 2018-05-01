@@ -2,6 +2,7 @@ import requests from "./requests.js";
 import tabs from "./tabs.js";
 import editor from "./editor.js";
 import select from './select.js';
+import {reducer as toastr} from 'react-redux-toastr';
 import {RESET_LOCAL_STORAGE} from "../actions/requests.js";
 import {combineReducers} from 'redux';
 
@@ -13,7 +14,8 @@ export default (state, action) => {
     requests,
     tabs,
     select,
-    editor
+    editor,
+    toastr
   });
 
   return combinedReducers(state, action);

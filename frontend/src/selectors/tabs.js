@@ -4,7 +4,7 @@ import {createSelector} from 'reselect';
 
 const tabsState = state => state.tabs;
 
-export const getCurrentUriTab = createSelector(
+const getCurrentUriTab = createSelector(
   [tabsState, getCurrentUri],
   (tabs, currentUri) => tabs[currentUri] || {}
 );

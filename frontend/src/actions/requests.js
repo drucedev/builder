@@ -1,8 +1,8 @@
 import http from "../http.js";
 import config from "../config.js";
 import {prepareJson, prettyJson, readJsonFile, saveJsonFile} from "../utils.js";
-import mockBuilder from "../mock/mockBuilder";
 import {encodeUri} from "../utils";
+import {toastr} from 'react-redux-toastr';
 
 export const SET_REQUESTS = "requests/SET_REQUESTS";
 export const setRequests = (requests) => ({
@@ -11,15 +11,15 @@ export const setRequests = (requests) => ({
 });
 
 export const SAVE_REQUEST = "requests/SAVE_REQUEST";
-export const saveRequest = (uri, request) => ({
+export const saveRequest = ({uri, ...request}) => ({
   type: SAVE_REQUEST,
   uri, id: request.id, request
 });
 
 export const EDIT_REQUEST = "requests/EDIT_REQUEST";
-export const editRequest = (uri, request) => ({
+export const editRequest = ({uri, id, ...request}) => ({
   type: EDIT_REQUEST,
-  uri, id: request.id, request
+  uri, id, request
 });
 
 export const DELETE_REQUEST = "requests/DELETE_REQUEST";
@@ -49,7 +49,8 @@ export const importRequests = file => (dispatch, getState) => {
     .then(uriToRequestsMapFromFile => {
       const uriToRequestsMap = getState().requests;
       dispatch(setRequests({...uriToRequestsMap, ...uriToRequestsMapFromFile}));
-    });
+    })
+    .catch(err => toastr.error('Ошибка', err.message));
 };
 
 export const EXPORT_REQUESTS = "requests/EXPORT_REQUESTS";
@@ -73,7 +74,7 @@ export const resetLocalStorage = () => dispatch => {
 export const fetchBuilder = () => (dispatch, getState) => {
   dispatch(requestBuilder());
   return http.get(config.builderUri)
-    .then(response => {
+    .then((response) => {
       const requestWrapper = ['java.util.ArrayList'];
       const fgServices = response.data;
       const requests = fgServices.reduce((result, service) => {
@@ -107,7 +108,7 @@ export const postRequest = (uri, request) => (dispatch) => {
     {headers: {'Content-Type': 'application/json;charset=utf8'}}
   ).then(res => {
     const json = prettyJson(res.data);
-    const response = res.data.stackTrace && prepareJson(json) || json;
+    const response = res.data.stackTrace ? prepareJson(json) : json;
     dispatch(sendCurrentRequestSuccess());
     return response;
   });

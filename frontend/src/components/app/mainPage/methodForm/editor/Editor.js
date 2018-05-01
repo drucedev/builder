@@ -1,11 +1,8 @@
-import {textarea} from "../../../../elements";
-import {normalizeLineEndings} from "../../../../../utils";
 import React from 'react';
-import "codemirror/lib/codemirror.css";
-import "codemirror/addon/lint/lint.css";
-import "codemirror/addon/dialog/dialog.css";
-import "codemirror/addon/display/fullscreen.css";
+import PropTypes from 'prop-types';
 import CodeMirror from 'codemirror';
+import {normalizeLineEndings} from "../../../../../utils";
+import './Editor.css';
 import 'codemirror-formatting';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/lint/lint';
@@ -19,7 +16,7 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/display/autorefresh';
 import 'codemirror/addon/display/fullscreen';
 
-export default class FgMethodEditor extends React.Component {
+export default class Editor extends React.Component {
 
   componentDidMount() {
     const codeMirrorInstance = this.getCodeMirrorInstance();
@@ -32,8 +29,7 @@ export default class FgMethodEditor extends React.Component {
       tabSize: 4,
       indentUnit: 4
     });
-    this.codeMirror.setSize('100%', 'calc(100vh - 310px)');
-    this.codeMirror.on('change', this.onChange.bind(this));
+    this.codeMirror.on('change', this.onChange);
     this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
     this.codeMirror.addKeyMap(this.getDefaultKeyMap());
     this.componentWillReceiveProps(this.props);
@@ -68,7 +64,7 @@ export default class FgMethodEditor extends React.Component {
   getDefaultKeyMap() {
     return {
       'Ctrl-Alt-L': this.onFormat,
-      'Ctrl-Enter': this.onToggleFullScreenMode.bind(this)
+      'Ctrl-Enter': this.onToggleFullScreenMode
     }
   }
 
@@ -77,13 +73,11 @@ export default class FgMethodEditor extends React.Component {
     editor.autoFormatRange({line: 0, ch: 0}, {line: lastLine, ch: editor.getLine(lastLine).length});
   }
 
-  onToggleFullScreenMode() {
-    if (this.props.onToggleFullScreenMode) {
-      this.props.onToggleFullScreenMode();
-    }
-  }
+  onToggleFullScreenMode = () => {
+    this.props.onToggleFullScreenMode && this.props.onToggleFullScreenMode();
+  };
 
-  onChange(doc, change) {
+  onChange = (doc, change) => {
     if (this.props.onChange && change.origin !== 'setValue') {
       this.props.onChange(doc.getValue());
     }
@@ -94,9 +88,16 @@ export default class FgMethodEditor extends React.Component {
   }
 
   render() {
-    return textarea({
-      ref: ref => this.textareaNode = ref,
-      style: {resize: 'none'}
-    })
+    return (
+      <textarea ref={(ref) => this.textareaNode = ref}/>
+    );
   }
 }
+
+Editor.propTypes = {
+  value: PropTypes.string,
+  defaultValue: PropTypes.string,
+  options: PropTypes.object,
+  onChange: PropTypes.func,
+  onToggleFullScreenMode: PropTypes.func,
+};

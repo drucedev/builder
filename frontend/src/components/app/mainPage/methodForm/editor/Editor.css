@@ -1,0 +1,13 @@
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/addon/lint/lint.css";
+@import "~codemirror/addon/dialog/dialog.css";
+@import "~codemirror/addon/display/fullscreen.css";
+
+.CodeMirror {
+    width: 100%;
+    height: calc(100vh - 310px);
+}
+
+textarea {
+    resize: none;
+}
