@@ -7,9 +7,9 @@ import ImportButton from "../buttons/ImportButton";
 import {saveJsonFile} from "../../../utils";
 
 class NavbarControls extends React.Component {
-  onExportAll() {
+  onExportAll = () => {
     saveJsonFile('requests', this.props.requests);
-  }
+  };
 
   render() {
     const {resetLocalStorage} = this.props;

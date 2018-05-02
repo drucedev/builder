@@ -9,10 +9,10 @@ import ImportButton from "../buttons/ImportButton";
 import {saveJsonFile} from "../../../utils";
 
 class MainPage extends React.Component {
-  onExport() {
+  onExport = () => {
     const {currentUri, currentRequests} = this.props;
     saveJsonFile(currentUri, currentRequests);
-  }
+  };
 
   render() {
     if (!this.props.currentRequest) {
