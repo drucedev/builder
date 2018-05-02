@@ -2,7 +2,7 @@ import {getSelectedId} from "./select.js";
 import {getCurrentUri} from "./router.js";
 import {createSelector} from 'reselect';
 
-const tabsState = state => state.tabs;
+const tabsState = (state) => state.tabs;
 
 const getCurrentUriTab = createSelector(
   [tabsState, getCurrentUri],

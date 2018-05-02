@@ -1,21 +1,27 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {exportAllRequests, importRequests, resetLocalStorage} from "../../../actions/requests";
+import {resetLocalStorage} from "../../../actions/requests";
 import {connect} from 'react-redux';
 import './Navbar.css';
+import ImportButton from "../buttons/ImportButton";
+import {saveJsonFile} from "../../../utils";
 
 class NavbarControls extends React.Component {
+  onExportAll() {
+    saveJsonFile('requests', this.props.requests);
+  }
+
   render() {
-    const {importRequests, exportAllRequests, resetLocalStorage} = this.props;
+    const {resetLocalStorage} = this.props;
 
     return (
       <li>
         <div className='btn-group'>
           <label className='btn btn-primary'>
-            <input className='hidden' type='file' onChange={(e) => importRequests(e.target.files[0])}/>
+            <ImportButton/>
             Загрузить из файла
           </label>
-          <button className='btn btn-primary' type='button' onClick={exportAllRequests}>
+          <button className='btn btn-primary' type='button' onClick={this.onExportAll}>
             Сохранить в файл
           </button>
         </div>
@@ -28,15 +34,16 @@ class NavbarControls extends React.Component {
 }
 
 NavbarControls.propTypes = {
+  requests: PropTypes.object.isRequired,
   resetLocalStorage: PropTypes.func.isRequired,
   exportAllRequests: PropTypes.func.isRequired,
   importRequests: PropTypes.func.isRequired
 };
 
+const mapStateToProps = ({requests}) => ({requests});
+
 const mapDispatchToProps = {
-  resetLocalStorage,
-  exportAllRequests,
-  importRequests
+  resetLocalStorage
 };
 
-export default connect(null, mapDispatchToProps)(NavbarControls);
+export default connect(mapStateToProps, mapDispatchToProps)(NavbarControls);

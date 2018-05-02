@@ -1,16 +1,11 @@
-import {
-  SET_REQUESTS,
-  EDIT_REQUEST,
-  SAVE_REQUEST,
-  DELETE_REQUEST
-} from "../actions/requests.js";
+import {DELETE_REQUEST, EDIT_REQUEST, IMPORT_REQUESTS, SAVE_REQUEST} from "../actions/requests";
 
 export const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_REQUESTS:
-      return action.requests;
+    case IMPORT_REQUESTS:
+      return {...state, ...action.requests};
     case SAVE_REQUEST:
       return {
         ...state,

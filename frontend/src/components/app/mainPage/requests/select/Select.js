@@ -12,14 +12,16 @@ import {getCurrentUri} from "../../../../../selectors/router";
 class Select extends React.Component {
   render() {
     const {currentUri, currentRequest, currentRequests, changeSelected} = this.props;
-    return <ReactSelect className='request-select'
+    return (
+      <ReactSelect className='request-select'
                         autosize={false}
                         options={currentRequests}
                         clearable={false}
                         value={currentRequest}
                         labelKey='name'
                         onChange={(selected) => changeSelected(currentUri, selected.id)}
-                        optionComponent={SelectOption}/>;
+                        optionComponent={SelectOption}/>
+    );
   }
 }
 

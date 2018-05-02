@@ -1,14 +1,7 @@
 import http from "../http.js";
 import config from "../config.js";
-import {prepareJson, prettyJson, readJsonFile, saveJsonFile} from "../utils.js";
+import {prepareJson, prettyJson} from "../utils.js";
 import {encodeUri} from "../utils";
-import {toastr} from 'react-redux-toastr';
-
-export const SET_REQUESTS = "requests/SET_REQUESTS";
-export const setRequests = (requests) => ({
-  type: SET_REQUESTS,
-  requests
-});
 
 export const SAVE_REQUEST = "requests/SAVE_REQUEST";
 export const saveRequest = ({uri, ...request}) => ({
@@ -29,7 +22,7 @@ export const deleteRequest = (uri, id) => ({
 });
 
 export const REQUEST_BUILDER = "requests/REQUEST_BUILDER";
-const requestBuilder = () => ({
+export const requestBuilder = () => ({
   type: REQUEST_BUILDER
 });
 export const SEND_CURRENT_REQUEST = "requests/SEND_CURRENT_REQUEST";
@@ -43,28 +36,10 @@ export const sendCurrentRequestSuccess = () => ({
 });
 
 export const IMPORT_REQUESTS = "requests/IMPORT_REQUESTS";
-export const importRequests = file => (dispatch, getState) => {
-  dispatch({type: IMPORT_REQUESTS});
-  readJsonFile(file)
-    .then(uriToRequestsMapFromFile => {
-      const uriToRequestsMap = getState().requests;
-      dispatch(setRequests({...uriToRequestsMap, ...uriToRequestsMapFromFile}));
-    })
-    .catch(err => toastr.error('Ошибка', err.message));
-};
-
-export const EXPORT_REQUESTS = "requests/EXPORT_REQUESTS";
-export const exportRequests = uri => (dispatch, getState) => {
-  dispatch({type: EXPORT_REQUESTS});
-  saveJsonFile(uri, {[uri]: getState().requests[uri]});
-};
-
-export const EXPORT_ALL_REQUESTS = "requests/EXPORT_ALL_REQUESTS";
-export const exportAllRequests = () => (dispatch, getState) => {
-  dispatch({type: EXPORT_ALL_REQUESTS});
-  saveJsonFile('requests', getState().requests);
-};
-
+export const importRequests = (requests) => ({
+  type: IMPORT_REQUESTS,
+  requests
+});
 export const RESET_LOCAL_STORAGE = "requests/RESET_LOCAL_STORAGE";
 export const resetLocalStorage = () => dispatch => {
   dispatch({type: RESET_LOCAL_STORAGE});
@@ -96,7 +71,7 @@ export const fetchBuilder = () => (dispatch, getState) => {
         });
         return result;
       }, {});
-      dispatch(setRequests(requests));
+      dispatch(importRequests(requests));
       return fgServices;
     });
 };
@@ -104,12 +79,11 @@ export const fetchBuilder = () => (dispatch, getState) => {
 export const postRequest = (uri, request) => (dispatch) => {
   dispatch(sendCurrentRequest());
   const encodedUri = encodeUri(uri);
-  return http.post(encodedUri, request.value,
-    {headers: {'Content-Type': 'application/json;charset=utf8'}}
-  ).then(res => {
-    const json = prettyJson(res.data);
-    const response = res.data.stackTrace ? prepareJson(json) : json;
-    dispatch(sendCurrentRequestSuccess());
-    return response;
-  });
+  return http.post(encodedUri, request.value, {headers: {'Content-Type': 'application/json;charset=utf8'}})
+    .then((res) => {
+      const json = prettyJson(res.data);
+      const response = res.data.stackTrace ? prepareJson(json) : json;
+      dispatch(sendCurrentRequestSuccess());
+      return response;
+    });
 };

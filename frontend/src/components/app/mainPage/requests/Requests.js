@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from "./select/Select";
-import {editRequest, saveRequest,} from "../../../../actions/requests";
+import {editRequest, saveRequest} from "../../../../actions/requests";
 import {generateId} from "../../../../utils";
 import config from "../../../../config";
 import {connect} from 'react-redux';

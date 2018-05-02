@@ -5,7 +5,7 @@ import {createSelector} from 'reselect';
 
 const requestsState = state => state.requests;
 
-const getCurrentRequests = createSelector(
+export const getCurrentRequests = createSelector(
   [requestsState, getCurrentUri],
   (requests, currentUri) => requests[currentUri] || {}
 );
