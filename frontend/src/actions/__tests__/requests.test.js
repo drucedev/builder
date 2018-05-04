@@ -1,18 +1,11 @@
-import http from '../../http';
-import moxios from 'moxios';
 import {
-  DELETE_REQUEST, deleteRequest, EDIT_REQUEST, editRequest, fetchBuilder, IMPORT_REQUESTS, importRequests,
-  postRequest, REQUEST_BUILDER, requestBuilder, SAVE_REQUEST, saveRequest, SEND_CURRENT_REQUEST,
-  SEND_CURRENT_REQUEST_SUCCESS, sendCurrentRequest, sendCurrentRequestSuccess
+  DELETE_REQUEST, deleteRequest, EDIT_REQUEST, editRequest, IMPORT_REQUESTS, importRequests, REQUEST_BUILDER,
+  requestBuilder, SAVE_REQUEST, saveRequest, SEND_CURRENT_REQUEST, SEND_CURRENT_REQUEST_SUCCESS, sendCurrentRequest,
+  sendCurrentRequestSuccess
 } from "../requests";
-import mockBuilder from "../../mocks/mockBuilder";
-import mockStore from "../../mocks/mockStore";
-import mockRequests from "../../mocks/mockRequests";
+import mockRequests from "../__mocks__/mockRequests";
 
-const mockRequest = {
-  name: 'test',
-  value: 'test'
-};
+const mockRequest = {uri: 'test', id: '1', name: 'test', value: 'test'};
 
 describe('requests actions', () => {
   const uri = 'test';
@@ -22,10 +15,10 @@ describe('requests actions', () => {
 
     const importRequestsAction = {
       type: IMPORT_REQUESTS,
-      requests: {[uri]: {...mockRequest, id}}
+      requests: mockRequests
     };
 
-    expect(importRequests(importRequestsAction.requests)).toEqual(importRequestsAction);
+    expect(importRequests(mockRequests)).toEqual(importRequestsAction);
 
   });
 
@@ -33,19 +26,19 @@ describe('requests actions', () => {
 
     const saveRequestAction = {
       type: SAVE_REQUEST,
-      uri, id, request: {...mockRequest, id}
+      uri, id, request: {id: mockRequest.id, name: mockRequest.name, value: mockRequest.value}
     };
-    expect(saveRequest({...mockRequest, uri, id})).toEqual(saveRequestAction);
+    expect(saveRequest(mockRequest)).toEqual(saveRequestAction);
   });
 
   it('should create an action to edit request', () => {
 
     const editRequestAction = {
       type: EDIT_REQUEST,
-      uri, id, request: mockRequest
+      uri, id, request: {name: mockRequest.name, value: mockRequest.value}
     };
 
-    expect(editRequest({...mockRequest, uri, id})).toEqual(editRequestAction);
+    expect(editRequest(mockRequest)).toEqual(editRequestAction);
   });
 
   it('should create an action to delete request', () => {
@@ -78,51 +71,4 @@ describe('requests actions', () => {
   });
 
 
-});
-
-describe('requests async actions', () => {
-  beforeEach(function () {
-    moxios.install(http);
-  });
-
-  afterEach(function () {
-    moxios.uninstall()
-  });
-
-  it('should fetch builder and set requests', () => {
-    const request = moxios.requests.mostRecent();
-    moxios.wait(() => {
-      request.respondWith({
-        status: 200,
-        response: mockBuilder
-      });
-
-      const expectedActions = [
-        {type: REQUEST_BUILDER},
-        {type: IMPORT_REQUESTS, requests: mockRequests}
-      ];
-
-      return mockStore.dispatch(fetchBuilder()).then(() => {
-        expect(mockStore.getActions()).toEqual(expectedActions)
-      });
-    });
-  });
-
-  it('should send current request to api', () => {
-    const request = moxios.requests.mostRecent();
-    moxios.wait(() => {
-      request.respondWith({
-        status: 200,
-        response: [{status: 'OK'}]
-      });
-      const expectedActions = [
-        {type: SEND_CURRENT_REQUEST},
-        {type: SEND_CURRENT_REQUEST_SUCCESS}
-      ];
-
-      return mockStore.dispatch(postRequest('/serviceName/methodName', request)).then(() => {
-        expect(mockStore.getActions()).toEqual(expectedActions);
-      });
-    });
-  });
 });

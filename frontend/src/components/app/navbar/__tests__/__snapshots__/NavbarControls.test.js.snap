@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavbarControls tests NavbarControls renders correctly 1`] = `
+<li>
+  <div
+    className="btn-group"
+  >
+    <label
+      className="btn btn-primary"
+    >
+      <input
+        className="hidden"
+        onChange={[Function]}
+        type="file"
+      />
+      Загрузить из файла
+    </label>
+    <button
+      className="btn btn-primary"
+      onClick={[Function]}
+      type="button"
+    >
+      Сохранить в файл
+    </button>
+  </div>
+  <button
+    className="btn btn-danger btn-margin-left"
+    onClick={[Function]}
+    type="button"
+  >
+    Сбросить всё
+  </button>
+</li>
+`;

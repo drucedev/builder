@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavbarLabel tests NavbarLabel renders correctly 1`] = `
+<li>
+  <a>
+    /service1/method1
+  </a>
+</li>
+`;

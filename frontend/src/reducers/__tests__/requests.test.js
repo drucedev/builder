@@ -1,14 +1,8 @@
 import reducer from '../requests';
 import {deleteRequest, editRequest, importRequests, saveRequest} from "../../actions/requests";
-import mockRequests from "../../mocks/mockRequests";
+import mockRequests from "../../actions/__mocks__/mockRequests";
 
 const mockRequest = {uri: 'test', id: '1', name: 'test', value: 'test'};
-
-const savedRequest = {
-  id: mockRequest.id,
-  name: mockRequest.name,
-  value: mockRequest.value
-};
 
 describe('requests reducer', () => {
   it('should return initial state', () => {
@@ -20,12 +14,20 @@ describe('requests reducer', () => {
   });
 
   it('should save request', () => {
-    expect(reducer(undefined, saveRequest(mockRequest))).toEqual({[mockRequest.uri]: {[mockRequest.id]: savedRequest}});
+    expect(reducer(undefined, saveRequest(mockRequest))).toEqual({
+      [mockRequest.uri]: {
+        [mockRequest.id]: {id: mockRequest.id, name: mockRequest.name, value: mockRequest.value}
+      }
+    });
   });
 
   it('should edit request', () => {
     const state = reducer(undefined, saveRequest(mockRequest));
-    expect(reducer(state, editRequest(mockRequest))).toEqual({[mockRequest.uri]: {[mockRequest.id]: savedRequest}});
+    expect(reducer(state, editRequest(mockRequest))).toEqual({
+      [mockRequest.uri]: {
+        [mockRequest.id]: {id: mockRequest.id, name: mockRequest.name, value: mockRequest.value}
+      }
+    });
   });
 
   it('should delete request', () => {

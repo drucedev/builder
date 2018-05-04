@@ -36,8 +36,6 @@ class NavbarControls extends React.Component {
 NavbarControls.propTypes = {
   requests: PropTypes.object.isRequired,
   resetLocalStorage: PropTypes.func.isRequired,
-  exportAllRequests: PropTypes.func.isRequired,
-  importRequests: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({requests}) => ({requests});
