@@ -58,8 +58,7 @@ class MainPage extends React.Component {
 MainPage.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequests: PropTypes.object.isRequired,
-  currentRequest: PropTypes.object,
-  exportRequests: PropTypes.func.isRequired
+  currentRequest: PropTypes.object
 };
 
 const mapStateToProps = (state) => ({

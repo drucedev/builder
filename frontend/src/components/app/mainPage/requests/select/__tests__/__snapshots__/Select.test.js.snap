@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Select tests Select renders correctly 1`] = `
+<div
+  className="Select request-select has-value is-searchable Select--single"
+  style={undefined}
+>
+  <div
+    className="Select-control"
+    onKeyDown={[Function]}
+    onMouseDown={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    style={undefined}
+  >
+    <span
+      className="Select-multi-value-wrapper"
+      id="react-select-2--value"
+    >
+      <div
+        className="Select-value"
+        style={undefined}
+        title={undefined}
+      >
+        <span
+          aria-selected="true"
+          className="Select-value-label"
+          id="react-select-2--value-item"
+          role="option"
+        >
+          default
+        </span>
+      </div>
+      <div
+        className="Select-input"
+        style={
+          Object {
+            "display": "inline-block",
+          }
+        }
+      >
+        <input
+          aria-activedescendant="react-select-2--value"
+          aria-describedby={undefined}
+          aria-expanded="false"
+          aria-haspopup="false"
+          aria-label={undefined}
+          aria-labelledby={undefined}
+          aria-owns=""
+          className="Select-input"
+          id={undefined}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          required={false}
+          role="combobox"
+          tabIndex={undefined}
+          value=""
+        />
+      </div>
+    </span>
+    <span
+      className="Select-arrow-zone"
+      onMouseDown={[Function]}
+    >
+      <span
+        className="Select-arrow"
+        onMouseDown={[Function]}
+      />
+    </span>
+  </div>
+</div>
+`;

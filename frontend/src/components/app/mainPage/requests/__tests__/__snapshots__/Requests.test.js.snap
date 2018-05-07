@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Requests tests Requests renders correctly 1`] = `
+<div>
+  <div
+    className="col-md-4 col-sm-4"
+  >
+    <div
+      className="Select request-select has-value is-searchable Select--single"
+      style={undefined}
+    >
+      <div
+        className="Select-control"
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={undefined}
+      >
+        <span
+          className="Select-multi-value-wrapper"
+          id="react-select-2--value"
+        >
+          <div
+            className="Select-value"
+            style={undefined}
+            title={undefined}
+          >
+            <span
+              aria-selected="true"
+              className="Select-value-label"
+              id="react-select-2--value-item"
+              role="option"
+            >
+              default
+            </span>
+          </div>
+          <div
+            className="Select-input"
+            style={
+              Object {
+                "display": "inline-block",
+              }
+            }
+          >
+            <input
+              aria-activedescendant="react-select-2--value"
+              aria-describedby={undefined}
+              aria-expanded="false"
+              aria-haspopup="false"
+              aria-label={undefined}
+              aria-labelledby={undefined}
+              aria-owns=""
+              className="Select-input"
+              id={undefined}
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              required={false}
+              role="combobox"
+              tabIndex={undefined}
+              value=""
+            />
+          </div>
+        </span>
+        <span
+          className="Select-arrow-zone"
+          onMouseDown={[Function]}
+        >
+          <span
+            className="Select-arrow"
+            onMouseDown={[Function]}
+          />
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="col-md-4 col-sm-4"
+  >
+    <div
+      className="input-group pull-right"
+    >
+      <input
+        className="form-control"
+        onChange={[Function]}
+        placeholder="Введите имя набора"
+        type="text"
+        value="default"
+      />
+      <div
+        className="input-group-btn"
+      >
+        <button
+          className="btn btn-default"
+          disabled={true}
+          onClick={[Function]}
+        >
+          <i
+            className="glyphicon glyphicon-pencil"
+            title="Переименовать набор"
+          />
+        </button>
+        <button
+          className="btn btn-default"
+          onClick={[Function]}
+        >
+          <i
+            className="glyphicon glyphicon-plus"
+            title="Добавить набор"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

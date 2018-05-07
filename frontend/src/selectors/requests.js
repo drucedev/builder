@@ -3,7 +3,7 @@ import {getCurrentUri} from "./router.js";
 import config from "../config.js";
 import {createSelector} from 'reselect';
 
-const requestsState = state => state.requests;
+const requestsState = (state) => state.requests;
 
 export const getCurrentRequests = createSelector(
   [requestsState, getCurrentUri],
@@ -16,7 +16,8 @@ export const getCurrentRequestsValues = createSelector(
 
 export const getCurrentRequest = createSelector(
   [getSelectedId, getCurrentRequests],
-  (selectedId, currentRequests) => currentRequests[selectedId]);
+  (selectedId, currentRequests) => currentRequests[selectedId]
+);
 
 export const getDefaultRequestSchema = createSelector(
   getCurrentRequests, (requests) => requests[config.defaultRequestId].schema
