@@ -29,7 +29,7 @@ exports[`Select tests Select renders correctly 1`] = `
           id="react-select-2--value-item"
           role="option"
         >
-          default
+          test
         </span>
       </div>
       <div

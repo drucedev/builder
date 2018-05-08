@@ -2,7 +2,7 @@ import config from "../config.js";
 import {getCurrentUri} from "./router.js";
 import {createSelector} from 'reselect';
 
-const selectState = state => state.select;
+const selectState = (state) => state.select;
 
 export const getSelectedId = createSelector(
   [getCurrentUri, selectState],

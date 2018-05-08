@@ -16,7 +16,8 @@ class ServiceDropdown extends React.Component {
   }
 
   componentDidMount() {
-    new Dropdown(document.getElementById('service'), {persist: true});
+    const dropdown = document.getElementById('service');
+    !!dropdown && new Dropdown(dropdown, {persist: true});
   }
 
   render() {

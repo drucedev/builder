@@ -4,11 +4,9 @@ import ImportButton from "../ImportButton";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 
-const store = configureStore()({});
-
-
-describe('HelpPage tests', () => {
-  it('HelpPage renders correctly', () => {
+describe('ImportButton tests', () => {
+  it('ImportButton renders correctly', () => {
+    const store = configureStore()({});
     const tree = renderer
       .create(
         <Provider store={store}>

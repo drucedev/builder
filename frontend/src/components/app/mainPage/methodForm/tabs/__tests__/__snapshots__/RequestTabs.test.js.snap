@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RequestTabs tests RequestTabs renders correctly 1`] = `
+<div
+  className="tabs tabs-1"
+>
+  <div
+    className="tab-links"
+  >
+    <div
+      className="tab-link tab-link-active"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      style={
+        Object {
+          "fontWeight": "bold",
+        }
+      }
+      tabIndex="0"
+    >
+      Запрос
+    </div>
+    <div
+      className="tab-link"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      style={Object {}}
+      tabIndex="0"
+    >
+      Описание параметров
+    </div>
+  </div>
+  <div
+    className="content"
+  >
+    <div
+      className="tab-content tab-content-visible"
+      style={Object {}}
+    />
+    <div
+      className="tab-content"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    />
+  </div>
+</div>
+`;

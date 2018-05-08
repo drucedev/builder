@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavbarHeader tests NavbarHeader renders correctly 1`] = `
+<div
+  className="navbar-header"
+>
+  <label
+    className="navbar-brand"
+  >
+    <a
+      href="/"
+      onClick={[Function]}
+    >
+      Api
+    </a>
+  </label>
+</div>
+`;

@@ -4,20 +4,10 @@ import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import SelectOption from "../SelectOption";
 
-const store = configureStore()({
-  router: {location: {pathname: '/service1/method1'}},
-  requests: {
-    '/service1/method1': {
-      'default': {
-        id: 'default',
-        name: 'default',
-        value: 'test',
-        schema: 'test'
-      }
-    }
-  },
-  select: {}
-});
+jest.mock('../../../../../../selectors/router', () => ({getCurrentUri: () => '/service/method'}));
+jest.mock('../../../../../../selectors/requests', () => ({getCurrentRequest: () => ({}),}));
+jest.mock('connected-react-router');
+const store = configureStore()({});
 
 describe('SelectOption tests', () => {
   it('SelectOption renders correctly', () => {
@@ -27,8 +17,8 @@ describe('SelectOption tests', () => {
           <SelectOption option={{
             id: 'default',
             name: 'default',
-            value: 'test',
-            schema: 'test'
+            value: '{}',
+            schema: '{}'
           }}/>
         </Provider>
       )

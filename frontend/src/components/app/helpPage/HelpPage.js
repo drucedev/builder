@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class FaqPage extends React.Component {
+export default class HelpPage extends React.Component {
   render() {
     return (
       <div className='container'>

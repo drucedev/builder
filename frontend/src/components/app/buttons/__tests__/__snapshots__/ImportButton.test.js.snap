@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HelpPage tests HelpPage renders correctly 1`] = `
+exports[`ImportButton tests ImportButton renders correctly 1`] = `
 <input
   className="hidden"
   onChange={[Function]}

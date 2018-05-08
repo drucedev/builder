@@ -2,7 +2,7 @@ import {getCurrentUri} from "../router";
 
 const mockState = {
   router: {
-    location: {pathname: '/'}
+    location: {pathname: '/service/method'}
   }
 };
 

@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainPage tests MainPage renders correctly 1`] = `
+<div
+  className="container-fluid"
+>
+  <div
+    className="panel panel-default"
+  >
+    <div
+      className="panel-heading"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="col-md-4 col-sm-4"
+        >
+          <b>
+            Выберите тестовый запрос:
+          </b>
+        </div>
+        <div
+          className="col-md-4 col-sm-4"
+        >
+          <b>
+            Добавление запроса в список:
+          </b>
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <div
+          className="col-md-2 col-md-offset-2 col-sm-3 col-sm-offset-1"
+        >
+          <div
+            className="btn-group pull-right visible-md-inline-block"
+          >
+            <button
+              className="btn btn-default"
+            >
+              <i
+                className="glyphicon glyphicon-download"
+                onClick={[Function]}
+                role="button"
+                title="Скачать наборы"
+              />
+            </button>
+            <label
+              className="btn btn-default"
+              title="Загрузить наборы"
+            >
+              <i
+                className="glyphicon glyphicon-upload"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="panel-body"
+    />
+  </div>
+</div>
+`;

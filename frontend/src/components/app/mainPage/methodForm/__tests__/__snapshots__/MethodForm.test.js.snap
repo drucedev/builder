@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MethodForm tests MethodForm renders correctly 1`] = `
+<form
+  className="form-vertical"
+  onSubmit={[Function]}
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col-sm-6"
+    />
+    <div
+      className="col-sm-6"
+    />
+  </div>
+  <div
+    className="pull-right spacing"
+  >
+    <button
+      className="btn btn-primary"
+      type="submit"
+    >
+      Отправить
+    </button>
+  </div>
+</form>
+`;

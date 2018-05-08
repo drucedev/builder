@@ -1,13 +1,13 @@
 import {getSelectedTab} from "../tabs";
+jest.mock('../select', () => ({getSelectedId: () => '1'}));
+jest.mock('../router', () => ({getCurrentUri: () => '/service/method'}));
 
 const mockState = {
-  router: {location: {pathname: '/serviceName/methodName'}},
-  tabs: {'/serviceName/methodName': {'1': 'test'}},
-  select: {'/serviceName/methodName': '1'}
+  tabs: {'/service/method': {'1': 'value'}}
 };
 
 describe('tabs state selectors', () => {
   it('should return selected tab', () => {
-    expect(getSelectedTab(mockState)).toEqual(mockState.tabs['/serviceName/methodName']['1']);
+    expect(getSelectedTab(mockState)).toEqual(mockState.tabs['/service/method']['1']);
   });
 });

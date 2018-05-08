@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResponseTabs tests ResponseTabs renders correctly 1`] = `
+<div
+  className="tabs tabs-1"
+>
+  <div
+    className="tab-links"
+  >
+    <div
+      className="tab-link tab-link-active"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      style={
+        Object {
+          "fontWeight": "bold",
+        }
+      }
+      tabIndex="0"
+    >
+      Ответ
+    </div>
+  </div>
+  <div
+    className="content"
+  >
+    <div
+      className="tab-content tab-content-visible"
+      style={Object {}}
+    />
+  </div>
+</div>
+`;

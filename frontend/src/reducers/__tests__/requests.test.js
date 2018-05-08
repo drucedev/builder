@@ -1,8 +1,5 @@
 import reducer from '../requests';
 import {deleteRequest, editRequest, importRequests, saveRequest} from "../../actions/requests";
-import mockRequests from "../../actions/__mocks__/mockRequests";
-
-const mockRequest = {uri: 'test', id: '1', name: 'test', value: 'test'};
 
 describe('requests reducer', () => {
   it('should return initial state', () => {
@@ -10,28 +7,38 @@ describe('requests reducer', () => {
   });
 
   it('should import requests', () => {
-    expect(reducer(undefined, importRequests(mockRequests))).toEqual(mockRequests)
+    const requests = {
+      '/service/method': {
+        '1': {
+          id: '1',
+          name: 'test',
+          value: '{}'
+        }
+      }
+    };
+    expect(reducer(undefined, importRequests(requests))).toEqual(requests)
   });
 
+  const request = {uri: 'test', id: '1', name: 'test', value: '{}'};
   it('should save request', () => {
-    expect(reducer(undefined, saveRequest(mockRequest))).toEqual({
-      [mockRequest.uri]: {
-        [mockRequest.id]: {id: mockRequest.id, name: mockRequest.name, value: mockRequest.value}
+    expect(reducer(undefined, saveRequest(request))).toEqual({
+      [request.uri]: {
+        [request.id]: {id: request.id, name: request.name, value: request.value}
       }
     });
   });
 
   it('should edit request', () => {
-    const state = reducer(undefined, saveRequest(mockRequest));
-    expect(reducer(state, editRequest(mockRequest))).toEqual({
-      [mockRequest.uri]: {
-        [mockRequest.id]: {id: mockRequest.id, name: mockRequest.name, value: mockRequest.value}
+    const state = reducer(undefined, saveRequest(request));
+    expect(reducer(state, editRequest(request))).toEqual({
+      [request.uri]: {
+        [request.id]: {id: request.id, name: request.name, value: request.value}
       }
     });
   });
 
   it('should delete request', () => {
-    const state = reducer(undefined, saveRequest(mockRequest));
-    expect(reducer(state, deleteRequest(mockRequest.uri, mockRequest.id))).toEqual({[mockRequest.uri]: {}});
+    const state = reducer(undefined, saveRequest(request));
+    expect(reducer(state, deleteRequest(request.uri, request.id))).toEqual({[request.uri]: {}});
   })
 });

@@ -6,7 +6,8 @@ import {encodeUri} from "../../../../utils";
 
 export default class MethodDropdown extends React.Component {
   componentDidMount() {
-    document.getElementsByName('method').forEach((dropdown) => new Dropdown(dropdown, {persist: true}));
+    const dropdowns = document.getElementsByName('method');
+    !!dropdowns.length && dropdowns.forEach((dropdown) => new Dropdown(dropdown, {persist: true}));
   }
 
   render() {
