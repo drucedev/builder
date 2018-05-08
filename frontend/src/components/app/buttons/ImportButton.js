@@ -5,7 +5,7 @@ import {readJsonFile} from "../../../utils";
 import {toastr} from "react-redux-toastr";
 import {connect} from "react-redux";
 
-class ImportButton extends React.Component {
+export class BaseImportButton extends React.Component {
   onImportRequests = (e) => {
     const file = e.target.files[0];
     readJsonFile(file)
@@ -18,7 +18,7 @@ class ImportButton extends React.Component {
   }
 }
 
-ImportButton.propTypes = {
+BaseImportButton.propTypes = {
   importRequests: PropTypes.func.isRequired
 };
 
@@ -26,4 +26,4 @@ const mapDispatchToProps = {
   importRequests
 };
 
-export default connect(null, mapDispatchToProps)(ImportButton);
+export default connect(null, mapDispatchToProps)(BaseImportButton);

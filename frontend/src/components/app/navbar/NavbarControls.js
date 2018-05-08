@@ -6,7 +6,7 @@ import './Navbar.css';
 import ImportButton from "../buttons/ImportButton";
 import {saveJsonFile} from "../../../utils";
 
-class NavbarControls extends React.Component {
+export class BaseNavbarControls extends React.Component {
   onExportAll = () => {
     saveJsonFile('requests', this.props.requests);
   };
@@ -33,7 +33,7 @@ class NavbarControls extends React.Component {
   }
 }
 
-NavbarControls.propTypes = {
+BaseNavbarControls.propTypes = {
   requests: PropTypes.object.isRequired,
   resetLocalStorage: PropTypes.func.isRequired,
 };
@@ -44,4 +44,4 @@ const mapDispatchToProps = {
   resetLocalStorage
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavbarControls);
+export default connect(mapStateToProps, mapDispatchToProps)(BaseNavbarControls);

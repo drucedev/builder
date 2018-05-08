@@ -8,7 +8,7 @@ import './MethodForm.css';
 import {getCurrentRequest} from "../../../../selectors/requests";
 import {getCurrentUri} from "../../../../selectors/router";
 
-class MethodForm extends React.Component {
+export class BaseMethodForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {response: ''};
@@ -39,7 +39,7 @@ class MethodForm extends React.Component {
   }
 }
 
-MethodForm.propTypes = {
+BaseMethodForm.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequest: PropTypes.object.isRequired,
   postRequest: PropTypes.func.isRequired
@@ -54,4 +54,4 @@ const mapDispatchToProps = {
   postRequest
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MethodForm);
+export default connect(mapStateToProps, mapDispatchToProps)(BaseMethodForm);

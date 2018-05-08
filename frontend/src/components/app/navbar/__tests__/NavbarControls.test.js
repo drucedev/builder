@@ -1,21 +1,12 @@
 import React from "react";
 import renderer from 'react-test-renderer';
-import NavbarControls from "../NavbarControls";
-import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-
-const store = configureStore()({
-  requests: {}
-});
+import {BaseNavbarControls} from "../NavbarControls";
+jest.mock('../../buttons/ImportButton');
 
 describe('NavbarControls tests', () => {
   it('NavbarControls renders correctly', () => {
     const tree = renderer
-      .create(
-        <Provider store={store}>
-          <NavbarControls/>
-        </Provider>
-      )
+      .create(<BaseNavbarControls requests={{}} resetLocalStorage={jest.fn()}/>)
       .toJSON();
     expect(tree).toMatchSnapshot();
   })

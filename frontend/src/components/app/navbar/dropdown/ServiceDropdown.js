@@ -5,7 +5,7 @@ import {fetchBuilder} from "../../../../actions/requests";
 import {connect} from 'react-redux';
 import {Dropdown} from 'bootstrap.native';
 
-class ServiceDropdown extends React.Component {
+export class BaseServiceDropdown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {services: []};
@@ -36,7 +36,7 @@ class ServiceDropdown extends React.Component {
   }
 }
 
-ServiceDropdown.propTypes = {
+BaseServiceDropdown.propTypes = {
   fetchBuilder: PropTypes.func.isRequired
 };
 
@@ -44,4 +44,4 @@ const mapDispatchToProps = {
   fetchBuilder
 };
 
-export default connect(null, mapDispatchToProps)(ServiceDropdown);
+export default connect(null, mapDispatchToProps)(BaseServiceDropdown);

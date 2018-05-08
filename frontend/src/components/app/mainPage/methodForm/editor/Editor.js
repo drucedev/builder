@@ -19,6 +19,7 @@ import 'codemirror/addon/display/fullscreen';
 export default class Editor extends React.Component {
 
   componentDidMount() {
+    if (!this.textareaNode) return;
     const codeMirrorInstance = this.getCodeMirrorInstance();
     this.codeMirror = codeMirrorInstance.fromTextArea(this.textareaNode, {
       lineNumbers: true,

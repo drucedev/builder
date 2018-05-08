@@ -8,7 +8,7 @@ import {getCurrentRequest, getCurrentRequests} from "../../../selectors/requests
 import ImportButton from "../buttons/ImportButton";
 import {saveJsonFile} from "../../../utils";
 
-class MainPage extends React.Component {
+export class BaseMainPage extends React.Component {
   onExport = () => {
     const {currentUri, currentRequests} = this.props;
     saveJsonFile(currentUri, currentRequests);
@@ -55,7 +55,7 @@ class MainPage extends React.Component {
   }
 }
 
-MainPage.propTypes = {
+BaseMainPage.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequests: PropTypes.object.isRequired,
   currentRequest: PropTypes.object
@@ -67,4 +67,4 @@ const mapStateToProps = (state) => ({
   currentRequests: getCurrentRequests(state)
 });
 
-export default connect(mapStateToProps)(MainPage);
+export default connect(mapStateToProps)(BaseMainPage);

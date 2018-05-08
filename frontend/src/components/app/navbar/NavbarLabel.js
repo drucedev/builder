@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {getCurrentUri} from "../../../selectors/router";
 import {connect} from "react-redux";
 
-class NavbarLabel extends React.Component {
+export class BaseNavbarLabel extends React.Component {
   render() {
     return (
       <li>
@@ -13,7 +13,7 @@ class NavbarLabel extends React.Component {
   }
 }
 
-NavbarLabel.propTypes = {
+BaseNavbarLabel.propTypes = {
   currentUri: PropTypes.string
 };
 
@@ -21,4 +21,4 @@ const mapStateToProps = (state) => ({
   currentUri: getCurrentUri(state)
 });
 
-export default connect(mapStateToProps)(NavbarLabel)
+export default connect(mapStateToProps)(BaseNavbarLabel)

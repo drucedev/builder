@@ -13,7 +13,7 @@ import {editRequest} from '../../../../../actions/requests';
 import './Tabs.css';
 import {getCurrentUri} from "../../../../../selectors/router";
 
-class RequestTabs extends React.Component {
+export class BaseRequestTabs extends React.Component {
   render() {
     const {
       currentRequest, currentUri, isDefaultRequest,
@@ -49,7 +49,7 @@ class RequestTabs extends React.Component {
   }
 }
 
-RequestTabs.propTypes = {
+BaseRequestTabs.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequest: PropTypes.object.isRequired,
   isDefaultRequest: PropTypes.bool.isRequired,
@@ -76,4 +76,4 @@ const mapDispatchToProps = {
   toggleFullScreenMode
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequestTabs);
+export default connect(mapStateToProps, mapDispatchToProps)(BaseRequestTabs);

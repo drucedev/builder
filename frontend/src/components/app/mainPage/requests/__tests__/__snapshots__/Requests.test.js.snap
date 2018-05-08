@@ -16,7 +16,7 @@ exports[`Requests tests Requests renders correctly 1`] = `
         onChange={[Function]}
         placeholder="Введите имя набора"
         type="text"
-        value="test"
+        value={undefined}
       />
       <div
         className="input-group-btn"

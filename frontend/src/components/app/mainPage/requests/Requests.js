@@ -9,7 +9,7 @@ import {isDefaultRequest} from "../../../../selectors/select";
 import {getCurrentRequest} from "../../../../selectors/requests";
 import {getCurrentUri} from "../../../../selectors/router";
 
-class Requests extends React.Component {
+export class BaseRequests extends React.Component {
   constructor(props) {
     super(props);
     this.state = {currentRequestName: this.props.currentRequest.name};
@@ -60,7 +60,7 @@ class Requests extends React.Component {
   }
 }
 
-Requests.propTypes = {
+BaseRequests.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequest: PropTypes.object.isRequired,
   isDefaultRequest: PropTypes.bool.isRequired,
@@ -79,4 +79,4 @@ const mapDispatchToProps = {
   editRequest
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Requests);
+export default connect(mapStateToProps, mapDispatchToProps)(BaseRequests);

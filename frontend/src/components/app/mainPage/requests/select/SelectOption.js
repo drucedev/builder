@@ -7,7 +7,7 @@ import {getCurrentUri} from "../../../../../selectors/router";
 import {getCurrentRequest} from "../../../../../selectors/requests";
 import {changeSelected} from "../../../../../actions/select";
 
-class SelectOption extends React.Component {
+export class BaseSelectOption extends React.Component {
   handleMouseDown = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -49,7 +49,7 @@ class SelectOption extends React.Component {
   }
 }
 
-SelectOption.propTypes = {
+BaseSelectOption.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequest: PropTypes.object.isRequired,
   changeSelected: PropTypes.func.isRequired,
@@ -66,4 +66,4 @@ const mapDispatchToProps = {
   deleteRequest
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectOption);
+export default connect(mapStateToProps, mapDispatchToProps)(BaseSelectOption);

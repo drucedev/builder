@@ -28,9 +28,7 @@ exports[`Select tests Select renders correctly 1`] = `
           className="Select-value-label"
           id="react-select-2--value-item"
           role="option"
-        >
-          test
-        </span>
+        />
       </div>
       <div
         className="Select-input"

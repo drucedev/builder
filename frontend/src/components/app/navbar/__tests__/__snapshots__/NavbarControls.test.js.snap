@@ -8,11 +8,6 @@ exports[`NavbarControls tests NavbarControls renders correctly 1`] = `
     <label
       className="btn btn-primary"
     >
-      <input
-        className="hidden"
-        onChange={[Function]}
-        type="file"
-      />
       Загрузить из файла
     </label>
     <button

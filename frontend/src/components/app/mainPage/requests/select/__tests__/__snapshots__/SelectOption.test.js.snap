@@ -9,8 +9,11 @@ exports[`SelectOption tests SelectOption renders correctly 1`] = `
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseMove={[Function]}
-  >
-    default
-  </span>
+  />
+  <i
+    className="glyphicon glyphicon-remove text-danger pull-right"
+    onClick={[Function]}
+    role="button"
+  />
 </div>
 `;

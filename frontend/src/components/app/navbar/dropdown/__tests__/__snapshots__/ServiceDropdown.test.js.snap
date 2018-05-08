@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ServiceDropdown tests ServiceDropdown renders correctly 1`] = `
+<li
+  className="dropdown"
+>
+  <a
+    className="dropdown-toggle"
+    id="service"
+    role="button"
+  >
+    Сервисы
+    <span
+      className="caret"
+    />
+  </a>
+  <ul
+    className="dropdown-menu"
+    role="menu"
+  />
+</li>
+`;

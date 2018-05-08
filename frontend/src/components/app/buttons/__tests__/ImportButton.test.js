@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import ImportButton from "../ImportButton";
+import {BaseImportButton} from "../ImportButton";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 
@@ -10,7 +10,7 @@ describe('ImportButton tests', () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <ImportButton/>
+          <BaseImportButton importRequests={jest.fn()}/>
         </Provider>
       )
       .toJSON();

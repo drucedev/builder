@@ -3,7 +3,7 @@
 exports[`NavbarLabel tests NavbarLabel renders correctly 1`] = `
 <li>
   <a>
-    /service/method
+    
   </a>
 </li>
 `;

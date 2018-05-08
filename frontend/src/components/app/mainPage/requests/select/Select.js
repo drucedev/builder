@@ -9,7 +9,7 @@ import 'react-select/dist/react-select.css';
 import './Select.css'
 import {getCurrentUri} from "../../../../../selectors/router";
 
-class Select extends React.Component {
+export class BaseSelect extends React.Component {
   render() {
     const {currentUri, currentRequest, currentRequests, changeSelected} = this.props;
     return (
@@ -25,7 +25,7 @@ class Select extends React.Component {
   }
 }
 
-Select.propTypes = {
+BaseSelect.propTypes = {
   currentUri: PropTypes.string.isRequired,
   currentRequest: PropTypes.object.isRequired,
   currentRequests: PropTypes.array.isRequired,
@@ -42,4 +42,4 @@ const mapDispatchToProps = {
   changeSelected
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Select);
+export default connect(mapStateToProps, mapDispatchToProps)(BaseSelect);

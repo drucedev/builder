@@ -9,7 +9,6 @@ exports[`MethodDropdown tests MethodDropdown renders correctly 1`] = `
     name="method"
     role="button"
   >
-    ru.sbrf.bh.banking.product.pcredit.request.fg.SbrfPersonalCreditRequestFactoryFgService#0
     <span
       className="caret"
     />
@@ -17,18 +16,6 @@ exports[`MethodDropdown tests MethodDropdown renders correctly 1`] = `
   <ul
     className="dropdown-menu pull-right"
     role="menu"
-  >
-    <li
-      role="presentation"
-    >
-      <a
-        href="/ru.sbrf.bh.banking.product.pcredit.request.fg.SbrfPersonalCreditRequestFactoryFgService%230/changeStatus"
-        onClick={[Function]}
-        role="menuitem"
-      >
-        changeStatus
-      </a>
-    </li>
-  </ul>
+  />
 </li>
 `;
