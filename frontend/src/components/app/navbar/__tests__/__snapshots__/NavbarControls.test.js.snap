@@ -19,6 +19,13 @@ exports[`NavbarControls tests NavbarControls renders correctly 1`] = `
     </button>
   </div>
   <button
+    className="btn btn-info btn-margin-left"
+    onClick={[Function]}
+    type="button"
+  >
+    Помощь
+  </button>
+  <button
     className="btn btn-danger btn-margin-left"
     onClick={[Function]}
     type="button"

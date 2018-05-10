@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HelpContent tests HelpContent renders correctly 1`] = `
+<table
+  className="table"
+>
+  <thead>
+    <tr>
+      <th>
+        Сочетание клавиш
+      </th>
+      <th>
+        Описание
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Ctrl + Enter
+      </td>
+      <td>
+        Включить полноэкранный режим
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Ctrl + F
+      </td>
+      <td>
+        Поиск по тексту
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Ctrl + Alt + L
+      </td>
+      <td>
+        Отформатировать текст
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;

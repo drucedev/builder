@@ -1,0 +1,8 @@
+.ReactModal__Overlay {
+    z-index: 10;
+}
+
+.helpModal {
+    margin-top: 100px;
+    width: 50%;
+}

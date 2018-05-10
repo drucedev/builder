@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import './Navbar.css';
 import ImportButton from "../buttons/ImportButton";
 import {saveJsonFile} from "../../../utils";
+import {toggleModal} from "../../../actions/modal";
 
 export class BaseNavbarControls extends React.Component {
   onExportAll = () => {
@@ -12,7 +13,7 @@ export class BaseNavbarControls extends React.Component {
   };
 
   render() {
-    const {resetLocalStorage} = this.props;
+    const {resetLocalStorage, toggleModal} = this.props;
 
     return (
       <li>
@@ -25,6 +26,9 @@ export class BaseNavbarControls extends React.Component {
             Сохранить в файл
           </button>
         </div>
+        <button className='btn btn-info btn-margin-left' type='button' onClick={() => toggleModal('help')}>
+          Помощь
+        </button>
         <button className='btn btn-danger btn-margin-left' type='button' onClick={resetLocalStorage}>
           Сбросить всё
         </button>
@@ -36,12 +40,14 @@ export class BaseNavbarControls extends React.Component {
 BaseNavbarControls.propTypes = {
   requests: PropTypes.object.isRequired,
   resetLocalStorage: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({requests}) => ({requests});
 
 const mapDispatchToProps = {
-  resetLocalStorage
+  resetLocalStorage,
+  toggleModal
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BaseNavbarControls);
