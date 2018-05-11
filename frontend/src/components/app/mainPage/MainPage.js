@@ -11,7 +11,7 @@ import {saveJsonFile} from "../../../utils";
 export class BaseMainPage extends React.Component {
   onExport = () => {
     const {currentUri, currentRequests} = this.props;
-    saveJsonFile(currentUri, currentRequests);
+    saveJsonFile(currentUri, {[currentUri]: currentRequests});
   };
 
   render() {
