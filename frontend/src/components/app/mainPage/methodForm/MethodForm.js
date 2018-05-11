@@ -9,16 +9,15 @@ import {getCurrentRequest} from "../../../../selectors/requests";
 import {getCurrentUri} from "../../../../selectors/router";
 
 export class BaseMethodForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {response: ''};
+  componentWillMount() {
+    this.setState({response: ''});
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
-    const {currentUri, currentRequest} = this.props;
+    const {currentUri, currentRequest, postRequest} = this.props;
     postRequest(currentUri, currentRequest).then((response) => this.setState({response}));
-  }
+  };
 
   render() {
     return (

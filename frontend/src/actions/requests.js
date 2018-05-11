@@ -79,7 +79,7 @@ export const fetchBuilder = () => (dispatch, getState) => {
 export const postRequest = (uri, request) => (dispatch) => {
   dispatch(sendCurrentRequest());
   const encodedUri = encodeUri(uri);
-  return http.post(encodedUri, request.value, {headers: {'Content-Type': 'application/json;charset=utf8'}})
+  return http.post(`/rest${encodedUri}`, request.value, {headers: {'Content-Type': 'application/json;charset=utf8'}})
     .then((res) => {
       const json = prettyJson(res.data);
       const response = res.data.stackTrace ? prepareJson(json) : json;
