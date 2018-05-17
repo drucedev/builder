@@ -1,6 +1,8 @@
+const bfsName = typeof window === 'object' && window.location.pathname;
+
 export const loadState = () => {
   try {
-    const serializedState = localStorage.getItem('state');
+    const serializedState = localStorage.getItem(bfsName);
     if (serializedState === null) {
       return undefined;
     }
@@ -13,7 +15,7 @@ export const loadState = () => {
 export const saveState = state => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('state', serializedState);
+    localStorage.setItem(bfsName, serializedState);
   } catch (err) {
     // Ignore
   }
