@@ -9,11 +9,14 @@ import {ConnectedRouter} from 'connected-react-router';
 import {createHashHistory} from 'history';
 import './index.css';
 import registerServiceWorker from "./registerServiceWorker";
+import {registerInterceptors} from "./http";
 
 const history = createHashHistory();
 const persistedState = loadState();
 
 const store = configureStore(history, persistedState);
+
+registerInterceptors(store);
 
 store.subscribe(() => saveState(store.getState()));
 

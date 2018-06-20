@@ -1,4 +1,4 @@
-import http from "../http.js";
+import {http} from "../http.js";
 import config from "../config.js";
 import {prepareJson, prettyJson} from "../utils.js";
 import {encodeUri} from "../utils";
