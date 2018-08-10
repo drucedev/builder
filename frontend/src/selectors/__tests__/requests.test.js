@@ -27,7 +27,9 @@ describe('requests state selectors', () => {
   });
 
   it('should return current requests values', () => {
-    expect(getCurrentRequestsValues(mockState)).toEqual(Object.values(mockState.requests['/service/method']));
+    const requests = mockState.requests['/service/method'];
+    const currentRequests = Object.keys(requests).map((requestId) => requests[requestId]);
+    expect(getCurrentRequestsValues(mockState)).toEqual(currentRequests);
   });
 
   it('should return current request', () => {

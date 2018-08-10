@@ -4,6 +4,7 @@ import App from "../App";
 import {MemoryRouter} from "react-router-dom";
 
 jest.mock('../helpPage/HelpPage');
+jest.mock('../loader/Loader');
 jest.mock('../helpPage/modal/HelpModal');
 jest.mock('../mainPage/MainPage');
 jest.mock('../navbar/Navbar');

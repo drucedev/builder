@@ -11,7 +11,7 @@ export const getCurrentRequests = createSelector(
 );
 
 export const getCurrentRequestsValues = createSelector(
-  getCurrentRequests, (currentRequests) => Object.values(currentRequests)
+  getCurrentRequests, (currentRequests) => Object.keys(currentRequests).map((requestId) => currentRequests[requestId])
 );
 
 export const getCurrentRequest = createSelector(
