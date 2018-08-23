@@ -19,6 +19,10 @@ export const saveJsonFile = (name, object) => {
   saveAs(new Blob([serializedObject], {type: 'application/json;charset=utf8'}), `${name}.json`)
 };
 
+export const savePlainFile = (content, name) => {
+  saveAs(new Blob([content]), name);
+};
+
 export const readJsonFile = (file) => {
   const reader = new FileReader();
 
