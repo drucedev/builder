@@ -10,6 +10,7 @@ import {createHashHistory} from 'history';
 import './index.css';
 import registerServiceWorker from "./registerServiceWorker";
 import {registerInterceptors} from "./http";
+import omit from 'lodash/omit';
 
 const history = createHashHistory();
 const persistedState = loadState();
@@ -18,7 +19,10 @@ const store = configureStore(history, persistedState);
 
 registerInterceptors(store);
 
-store.subscribe(() => saveState(store.getState()));
+store.subscribe(() => {
+  const state = store.getState();
+  return saveState(omit(state, 'loader'));
+});
 
 const rootEl = document.getElementById('root');
 Modal.setAppElement(rootEl);
