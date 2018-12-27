@@ -107,7 +107,7 @@ public class ReflectionBuilder {
         Collection<Field> fields = getInheritedPrivateFields(type);
         for (Field field : fields) {
             if (!field.isSynthetic()) {
-                Property property = buildProperty(new FieldWrapper(field.getName(), field.getType(), field.getGenericType()));
+                Property property = buildProperty(new FieldWrapper(field.getName(), field.getType(), field.getGenericType()), Collections.<String>emptySet());
                 properties.add(property);
             }
         }
@@ -118,7 +118,7 @@ public class ReflectionBuilder {
                 .build();
     }
 
-    private static Property buildProperty(FieldWrapper fieldWrapper) {
+    private static Property buildProperty(FieldWrapper fieldWrapper, Collection<String> path) {
         Class<?> type = fieldWrapper.getType();
 
         Property property;
@@ -142,11 +142,11 @@ public class ReflectionBuilder {
             property = new EnumProperty(enumConstants);
         } else if (isArray(type)) {
             Class<?> parameterizedType = getParameterizedType(fieldWrapper);
-            Property prop = buildProperty(new FieldWrapper(parameterizedType.getName(), parameterizedType, parameterizedType));
+            Property prop = buildProperty(new FieldWrapper(parameterizedType.getName(), parameterizedType, parameterizedType), path);
             Collection<Property> elements = Collections.singleton(prop);
             property = new ArrayProperty(elements);
         } else if (isCustomType(type)) {
-            Collection<Property> subProperties = buildSubProperties(type);
+            Collection<Property> subProperties = buildSubProperties(type, path);
             property = new ObjectProperty(subProperties);
         } else {
             property = new UntypedProperty();
@@ -158,13 +158,18 @@ public class ReflectionBuilder {
         return property;
     }
 
-    private static Collection<Property> buildSubProperties(Class<?> type) {
+    private static Collection<Property> buildSubProperties(Class<?> type, Collection<String> path) {
         Collection<Property> subProperties = new HashSet<>();
         if (!Map.class.isAssignableFrom(type) && !Throwable.class.isAssignableFrom(type)) {
             Collection<Field> fields = getInheritedPrivateFields(type);
             for (Field subField : fields) {
-                Property property = buildProperty(new FieldWrapper(subField.getName(), subField.getType(), subField.getGenericType()));
-                subProperties.add(property);
+                String subFieldName = subField.getName();
+                if (!path.contains(subFieldName)) {
+                    final Set<String> selfPath = new HashSet<>(path);
+                    selfPath.add(subFieldName);
+                    Property property = buildProperty(new FieldWrapper(subFieldName, subField.getType(), subField.getGenericType()), selfPath);
+                    subProperties.add(property);
+                }
             }
         }
 
