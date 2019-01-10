@@ -19,11 +19,16 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class ReflectionBuilder {
+
     private ReflectionBuilder() {
-        //private
+        // private
     }
 
-    public static Collection<FgService> build(ApplicationContext context) {
+    public static Collection<FgService> build(ApplicationContext context, String... excludeMethods) {
+        return build(context, new HashSet<>(Arrays.asList(excludeMethods)));
+    }
+
+    private static Collection<FgService> build(ApplicationContext context, Set<String> excludeMethods) {
         Set<FgService> fgServices = new TreeSet<>(new FgService.NameComparator());
 
         Map<String, AbstractFine> services = context.getBeansOfType(AbstractFine.class);
@@ -35,7 +40,7 @@ public class ReflectionBuilder {
             Class<?> serviceClass = service.getClass();
             Method[] methods = serviceClass.getDeclaredMethods();
 
-            Set<FgMethod> fgMethods = buildFgMethods(methods);
+            Set<FgMethod> fgMethods = buildFgMethods(methods, excludeMethods);
             FgService fgService = new FgService.Builder()
                     .name(name)
                     .methods(fgMethods)
@@ -47,20 +52,22 @@ public class ReflectionBuilder {
         return fgServices;
     }
 
-    private static Set<FgMethod> buildFgMethods(Method[] methods) {
+    private static Set<FgMethod> buildFgMethods(Method[] methods, Set<String> excludeMethods) {
         Set<FgMethod> fgMethods = new TreeSet<>(new FgMethod.NameComparator());
         for (Method method : methods) {
             String name = method.getName();
-            FgResponse fgResponse = buildFgResponse(method);
-            Set<Model> requestParameters = buildRequestParameters(method);
+            if (!excludeMethods.contains(name) && Modifier.isPublic(method.getModifiers())) {
+                FgResponse fgResponse = buildFgResponse(method);
+                Set<Model> requestParameters = buildRequestParameters(method);
 
-            FgMethod fgMethod = new FgMethod.Builder()
-                    .name(name)
-                    .response(fgResponse)
-                    .requestParameters(requestParameters)
-                    .build();
+                FgMethod fgMethod = new FgMethod.Builder()
+                        .name(name)
+                        .response(fgResponse)
+                        .requestParameters(requestParameters)
+                        .build();
 
-            fgMethods.add(fgMethod);
+                fgMethods.add(fgMethod);
+            }
         }
 
         return fgMethods;
